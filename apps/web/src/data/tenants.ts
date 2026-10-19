@@ -38,7 +38,7 @@ export const HOA_TENANTS: HoaTenantConfig[] = [
       scenes: [
         {
           id: "scene-avenue",
-          label: "01 / Grand Parkway & Estates",
+          label: "Grand Parkway & Estates",
           title: "Tree-Lined Limestone Boulevards & Custom Residences",
           subtitle: "485 thoughtfully sited custom homes across five distinct residential enclaves.",
           imageUrl:
@@ -48,7 +48,7 @@ export const HOA_TENANTS: HoaTenantConfig[] = [
         },
         {
           id: "scene-pavilion",
-          label: "02 / Conservatory & Aquatics",
+          label: "Conservatory & Aquatics",
           title: "The Veridian Pavilion & Zero-Edge Resort Pool",
           subtitle: "Heated lap lanes, cabanas, and year-round lakeside gathering terraces.",
           imageUrl:
@@ -58,7 +58,7 @@ export const HOA_TENANTS: HoaTenantConfig[] = [
         },
         {
           id: "scene-trails",
-          label: "03 / Greenbelt & Pocket Parks",
+          label: "Greenbelt & Pocket Parks",
           title: "14 Miles of Protected Creek & Botanical Trails",
           subtitle: "Interconnected pedestrian paths linking every village to nature preserves.",
           imageUrl:
@@ -1074,7 +1074,7 @@ export const HOA_TENANTS: HoaTenantConfig[] = [
       scenes: [
         {
           id: "scene-harbor",
-          label: "01 / Deepwater Marina & Estates",
+          label: "Deepwater Marina & Estates",
           title: "Protected Yacht Basin & Waterfront Promenades",
           subtitle: "320 custom residences with direct bay access and coral-stone seawalls.",
           imageUrl:
@@ -1084,7 +1084,7 @@ export const HOA_TENANTS: HoaTenantConfig[] = [
         },
         {
           id: "scene-club",
-          label: "02 / Bayside Beach Club",
+          label: "Bayside Beach Club",
           title: "The Aurelia Bayside Pavilion & Saltwater Infinity Pool",
           subtitle: "Panoramic bay views, private cabanas, and seaside terrace dining.",
           imageUrl:
@@ -1094,7 +1094,7 @@ export const HOA_TENANTS: HoaTenantConfig[] = [
         },
         {
           id: "scene-palms",
-          label: "03 / Royal Palm Botanical Walk",
+          label: "Royal Palm Botanical Walk",
           title: "Tropical Hammock Preserves & Harborside Boardwalks",
           subtitle: "6.5 miles of shaded coastal pathways and mangrove observation piers.",
           imageUrl:
@@ -1653,7 +1653,7 @@ export const HOA_TENANTS: HoaTenantConfig[] = [
       scenes: [
         {
           id: "scene-canyon",
-          label: "01 / Canyon Rim Residences",
+          label: "Canyon Rim Residences",
           title: "Rammed-Earth & weathered Steel Desert Estates",
           subtitle: "390 custom homes designed to blend seamlessly into the McDowell Foothills.",
           imageUrl:

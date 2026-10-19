@@ -7,6 +7,7 @@ import {
   MapPin,
   Calendar,
   ChevronRight,
+  ChevronLeft,
   ChevronDown,
   Menu,
   X,
@@ -25,10 +26,10 @@ import { HoaTenantConfig } from "@/types/hoa";
 
 interface NavbarAndHeroProps {
   tenant: HoaTenantConfig;
-  allTenants: HoaTenantConfig[];
-  onSelectTenant: (id: string) => void;
+  allTenants?: HoaTenantConfig[];
+  onSelectTenant?: (id: string) => void;
   onOpenPortalModal: (defaultTab?: "login" | "register" | "demo") => void;
-  onOpenCmsDrawer: () => void;
+  onOpenCmsDrawer?: () => void;
 }
 
 function AnimatedCounter({
@@ -105,6 +106,14 @@ export default function NavbarAndHero({
   }, [tenant.id]);
 
   useEffect(() => {
+    if (tenant.hero.scenes.length <= 1) return;
+    const timer = setInterval(() => {
+      setActiveSceneIndex((prev) => (prev + 1) % tenant.hero.scenes.length);
+    }, 6500);
+    return () => clearInterval(timer);
+  }, [tenant.hero.scenes.length]);
+
+  useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 24);
     };
@@ -130,72 +139,6 @@ export default function NavbarAndHero({
 
   return (
     <>
-      {/* Top Multi-Tenant & Gatehouse Utility Bar */}
-      <div
-        className="w-full text-xs border-b transition-colors duration-300"
-        style={{
-          backgroundColor: tenant.theme.bgDark,
-          color: "#F4F1EA",
-          borderColor: "rgba(255,255,255,0.12)",
-        }}
-      >
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-8 py-2.5 flex flex-wrap items-center justify-between gap-3">
-          {/* Left: Live Gate Status & Emergency Direct Line */}
-          <div className="flex flex-wrap items-center gap-4 sm:gap-6">
-            <div className="flex items-center gap-2">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
-              </span>
-              <span className="font-medium tracking-wide text-emerald-200">
-                {tenant.gateStatusText}
-              </span>
-            </div>
-            <a
-              href={`tel:${tenant.gatehousePhone.replace(/[^0-9]/g, "")}`}
-              className="hidden md:inline-flex items-center gap-1.5 text-stone-300 hover:text-white transition-colors"
-            >
-              <Phone className="w-3.5 h-3.5 text-amber-400" />
-              <span>24/7 Gatehouse:</span>
-              <span className="font-mono font-medium text-white">{tenant.gatehousePhone}</span>
-            </a>
-          </div>
-
-          {/* Right: Multi-Tenant Community Switcher & SaaS Theme Customizer */}
-          <div className="flex items-center gap-3 ml-auto">
-            <div className="flex items-center gap-2 bg-white/10 rounded-md px-2.5 py-1 border border-white/15">
-              <Building2 className="w-3.5 h-3.5 text-amber-300 shrink-0" />
-              <label htmlFor="tenant-select" className="text-[11px] uppercase tracking-wider text-stone-300 hidden sm:inline">
-                HOA Community:
-              </label>
-              <select
-                id="tenant-select"
-                value={tenant.id}
-                onChange={(e) => onSelectTenant(e.target.value)}
-                aria-label="Select HOA Subdivision Tenant"
-                className="bg-transparent text-white font-medium text-xs focus:outline-none cursor-pointer pr-1"
-              >
-                {allTenants.map((t) => (
-                  <option key={t.id} value={t.id} className="bg-stone-900 text-white">
-                    {t.name} ({t.locationCityState})
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <button
-              type="button"
-              onClick={onOpenCmsDrawer}
-              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-400/30 transition-colors cursor-pointer text-[11px] font-medium tracking-wide"
-              title="Preview Multi-Tenant HOA Admin & Branding Configuration"
-            >
-              <Sliders className="w-3 h-3" />
-              <span className="hidden sm:inline">SaaS Branding / CMS</span>
-            </button>
-          </div>
-        </div>
-      </div>
-
       {/* SECTION 1: Header and Navigation */}
       <header
         className={`sticky top-0 z-40 w-full transition-all duration-300 border-b ${
@@ -380,227 +323,127 @@ export default function NavbarAndHero({
         )}
       </header>
 
-      {/* SECTION 2: Hero / Main Banner */}
+      {/* SECTION 2: Hero / Full-Width Immersive Image Slider */}
       <section
         id="hero"
-        className="relative overflow-hidden border-b"
+        className="relative overflow-hidden border-b h-[calc(100vh-5rem)] min-h-[620px] max-h-[920px] flex items-center justify-center"
         style={{
-          backgroundColor: tenant.theme.bgPrimary,
+          backgroundColor: "#121A15",
           borderColor: tenant.theme.borderSubtle,
         }}
       >
-        {/* Subtle Architectural Background Grid Accent */}
-        <div
-          className="pointer-events-none absolute inset-0 opacity-35"
-          style={{
-            backgroundImage: `radial-gradient(${tenant.theme.accentSecondary}22 1px, transparent 1px)`,
-            backgroundSize: "28px 28px",
-          }}
-        />
-
-        <div className="relative max-w-[1440px] mx-auto px-4 sm:px-8 pt-10 pb-16 lg:py-20">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
-            {/* Left 6 Columns: Editorial Introduction & CTAs */}
-            <div className="lg:col-span-6 space-y-6 animate-fade-up">
-              <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border text-xs font-mono uppercase tracking-[0.14em]"
-                style={{
-                  backgroundColor: tenant.theme.bgSecondary,
-                  borderColor: tenant.theme.borderSubtle,
-                  color: tenant.theme.accentPrimary,
-                }}
-              >
-                <ShieldCheck className="w-3.5 h-3.5" style={{ color: tenant.theme.accentSecondary }} />
-                <span>{tenant.hero.eyebrow}</span>
-              </div>
-
-              <h1
-                className="font-display text-4xl sm:text-5xl xl:text-[58px] font-semibold tracking-tight leading-[1.07]"
-                style={{ color: tenant.theme.textPrimary }}
-              >
-                {tenant.hero.headline}
-              </h1>
-
-              <p
-                className="text-base sm:text-lg leading-relaxed max-w-2xl"
-                style={{ color: tenant.theme.textSecondary }}
-              >
-                {tenant.hero.description}
-              </p>
-
-              {/* Primary & Secondary Calls to Action */}
-              <div className="pt-2 flex flex-wrap items-center gap-4">
-                <a
-                  href="#amenities"
-                  className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-md text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:opacity-95 hover:-translate-y-0.5"
-                  style={{ backgroundColor: tenant.theme.accentPrimary }}
-                >
-                  <span>Explore Amenities & Grounds</span>
-                  <ChevronRight className="w-4 h-4" />
-                </a>
-
-                <button
-                  type="button"
-                  onClick={() => onOpenPortalModal("login")}
-                  className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-md text-sm font-semibold border transition-all duration-200 hover:bg-black/5 cursor-pointer"
-                  style={{
-                    borderColor: tenant.theme.accentPrimary,
-                    color: tenant.theme.accentPrimary,
-                  }}
-                >
-                  <Lock className="w-4 h-4" style={{ color: tenant.theme.accentSecondary }} />
-                  <span>Resident Portal Services</span>
-                </button>
-              </div>
-
-              {/* Quick Community Pulse Strip */}
+        {/* Full-Bleed Background Images with crossfade & Ken-Burns subtle zoom */}
+        <div className="absolute inset-0 z-0 overflow-hidden">
+          {tenant.hero.scenes.map((scene, idx) => {
+            const isActive = idx === activeSceneIndex;
+            return (
               <div
-                className="pt-6 border-t grid grid-cols-1 sm:grid-cols-3 gap-4"
-                style={{ borderColor: tenant.theme.borderSubtle }}
+                key={scene.id}
+                className={`absolute inset-0 transition-all duration-1000 ease-in-out ${
+                  isActive
+                    ? "opacity-100 scale-100"
+                    : "opacity-0 scale-105 pointer-events-none"
+                }`}
               >
-                <div className="flex items-start gap-2.5">
-                  <MapPin
-                    className="w-4 h-4 mt-0.5 shrink-0"
-                    style={{ color: tenant.theme.accentSecondary }}
-                  />
-                  <div>
-                    <p className="text-[11px] font-mono uppercase tracking-wider" style={{ color: tenant.theme.textSecondary }}>
-                      Subdivision Location
-                    </p>
-                    <p className="text-xs font-semibold mt-0.5" style={{ color: tenant.theme.textPrimary }}>
-                      {tenant.locationCityState}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-2.5">
-                  <Clock
-                    className="w-4 h-4 mt-0.5 shrink-0"
-                    style={{ color: tenant.theme.accentSecondary }}
-                  />
-                  <div>
-                    <p className="text-[11px] font-mono uppercase tracking-wider" style={{ color: tenant.theme.textSecondary }}>
-                      HOA Office Hours
-                    </p>
-                    <p className="text-xs font-semibold mt-0.5" style={{ color: tenant.theme.textPrimary }}>
-                      Mon–Sat · On-Site Concierge
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-2.5">
-                  <Calendar
-                    className="w-4 h-4 mt-0.5 shrink-0"
-                    style={{ color: tenant.theme.accentSecondary }}
-                  />
-                  <div>
-                    <p className="text-[11px] font-mono uppercase tracking-wider" style={{ color: tenant.theme.textSecondary }}>
-                      Next Board Assembly
-                    </p>
-                    <a
-                      href="#announcements"
-                      className="text-xs font-semibold mt-0.5 underline decoration-dotted hover:opacity-80 block"
-                      style={{ color: tenant.theme.accentPrimary }}
-                    >
-                      View Schedule & Agenda
-                    </a>
-                  </div>
-                </div>
+                <img
+                  src={scene.imageUrl}
+                  alt={scene.title}
+                  className="w-full h-full object-cover"
+                />
               </div>
+            );
+          })}
+
+          {/* Cinematic Vignette & Gradient Overlays for contrast */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/50" />
+          <div className="absolute inset-0 bg-black/20" />
+        </div>
+
+        {/* Center Editorial Hero Content */}
+        <div className="relative z-10 max-w-[1440px] w-full mx-auto px-6 sm:px-12 py-8 text-white">
+          <div className="max-w-3xl space-y-6 animate-fade-up">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium text-stone-200 bg-black/40 border border-white/20 backdrop-blur-md">
+              <span className="w-2 h-2 rounded-full bg-emerald-400" />
+              <span>{currentScene.label}</span>
             </div>
 
-            {/* Right 6 Columns: Interactive Architectural Showcase & Scene Switcher */}
-            <div className="lg:col-span-6 space-y-4">
-              <div
-                className="relative rounded-xl overflow-hidden border shadow-xl group"
-                style={{ borderColor: tenant.theme.borderSubtle }}
+            <h1 className="font-display text-4xl sm:text-6xl xl:text-7xl font-semibold tracking-tight leading-[1.08] text-white drop-shadow-md">
+              {tenant.hero.headline}
+            </h1>
+
+            <p className="text-base sm:text-lg lg:text-xl text-stone-200 leading-relaxed max-w-2xl font-light drop-shadow-sm">
+              {tenant.hero.description}
+            </p>
+
+            {/* Calls to Action */}
+            <div className="pt-2 flex flex-wrap items-center gap-4">
+              <a
+                href="#amenities"
+                className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-md text-sm font-semibold text-stone-950 bg-white hover:bg-stone-100 shadow-lg transition-all duration-200 hover:-translate-y-0.5"
               >
-                <div className="relative aspect-[16/11] w-full overflow-hidden bg-stone-900">
-                  <img
-                    src={currentScene.imageUrl}
-                    alt={currentScene.title}
-                    className="w-full h-full object-cover transition-all duration-700 group-hover:scale-103"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent" />
+                <span>Explore Amenities & Grounds</span>
+                <ChevronRight className="w-4 h-4 text-stone-950" />
+              </a>
 
-                  {/* Top Floating Timestamp & GPS Badge */}
-                  <div className="absolute top-4 left-4 right-4 flex items-center justify-between gap-2">
-                    <span className="px-3 py-1 rounded-full text-[11px] font-mono uppercase tracking-wider bg-black/60 text-stone-100 backdrop-blur-md border border-white/15">
-                      {currentScene.timeOfDay}
-                    </span>
-                    <span className="px-3 py-1 rounded-full text-[11px] font-mono bg-black/60 text-amber-200 backdrop-blur-md border border-white/15">
-                      {tenant.gpsCoordinates}
-                    </span>
-                  </div>
-
-                  {/* Bottom Scene Caption Card */}
-                  <div className="absolute bottom-4 left-4 right-4 p-4 sm:p-5 rounded-lg bg-black/65 backdrop-blur-md border border-white/15 text-white">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                      <div>
-                        <p className="text-[11px] font-mono uppercase tracking-widest text-amber-300">
-                          {currentScene.label}
-                        </p>
-                        <h2 className="font-display text-xl sm:text-2xl font-medium mt-0.5">
-                          {currentScene.title}
-                        </h2>
-                        <p className="text-xs sm:text-sm text-stone-300 mt-1">
-                          {currentScene.subtitle}
-                        </p>
-                      </div>
-                      <a
-                        href="#gallery"
-                        className="shrink-0 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-md bg-white/15 hover:bg-white/25 text-xs font-medium text-white border border-white/20 transition-colors self-start sm:self-center"
-                      >
-                        <span>Full Gallery</span>
-                        <ArrowUpRight className="w-3.5 h-3.5" />
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Interactive Scene Selector Tabs */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                {tenant.hero.scenes.map((scene, idx) => {
-                  const isActive = idx === activeSceneIndex;
-                  return (
-                    <button
-                      key={scene.id}
-                      type="button"
-                      onClick={() => setActiveSceneIndex(idx)}
-                      className={`text-left p-3 rounded-lg border transition-all cursor-pointer ${
-                        isActive ? "shadow-xs" : "opacity-75 hover:opacity-100"
-                      }`}
-                      style={{
-                        backgroundColor: isActive
-                          ? tenant.theme.bgSecondary
-                          : tenant.theme.bgPrimary,
-                        borderColor: isActive
-                          ? tenant.theme.accentSecondary
-                          : tenant.theme.borderSubtle,
-                      }}
-                    >
-                      <p
-                        className="text-[11px] font-mono uppercase tracking-wider"
-                        style={{
-                          color: isActive
-                            ? tenant.theme.accentSecondary
-                            : tenant.theme.textSecondary,
-                        }}
-                      >
-                        {scene.label}
-                      </p>
-                      <p
-                        className="text-xs font-semibold mt-1 line-clamp-1"
-                        style={{ color: tenant.theme.textPrimary }}
-                      >
-                        {scene.title}
-                      </p>
-                    </button>
-                  );
-                })}
-              </div>
+              <button
+                type="button"
+                onClick={() => onOpenPortalModal("login")}
+                className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-md text-sm font-semibold text-white bg-black/50 hover:bg-black/70 border border-white/30 backdrop-blur-md transition-all duration-200 cursor-pointer"
+              >
+                <Lock className="w-4 h-4 text-amber-300" />
+                <span>Resident Portal Services</span>
+              </button>
             </div>
           </div>
+        </div>
+
+        {/* Prev & Next Arrows (Floating on edges) */}
+        <button
+          type="button"
+          onClick={() =>
+            setActiveSceneIndex((prev) =>
+              (prev - 1 + tenant.hero.scenes.length) % tenant.hero.scenes.length
+            )
+          }
+          className="absolute left-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-black/50 hover:bg-black/80 text-white border border-white/20 backdrop-blur-md transition-all cursor-pointer hidden md:flex items-center justify-center hover:scale-105"
+          aria-label="Previous scene"
+        >
+          <ChevronLeft className="w-5 h-5" />
+        </button>
+
+        <button
+          type="button"
+          onClick={() =>
+            setActiveSceneIndex((prev) =>
+              (prev + 1) % tenant.hero.scenes.length
+            )
+          }
+          className="absolute right-6 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-black/50 hover:bg-black/80 text-white border border-white/20 backdrop-blur-md transition-all cursor-pointer hidden md:flex items-center justify-center hover:scale-105"
+          aria-label="Next scene"
+        >
+          <ChevronRight className="w-5 h-5" />
+        </button>
+
+        {/* Bottom Slide Indicator Glass Pill */}
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3 px-4 py-2 rounded-full bg-black/50 backdrop-blur-md border border-white/15">
+          <div className="flex items-center gap-1.5">
+            {tenant.hero.scenes.map((_, idx) => (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => setActiveSceneIndex(idx)}
+                className={`h-1.5 rounded-full transition-all cursor-pointer ${
+                  idx === activeSceneIndex
+                    ? "w-6 bg-white"
+                    : "w-2 bg-white/35 hover:bg-white/70"
+                }`}
+                aria-label={`Go to slide ${idx + 1}`}
+              />
+            ))}
+          </div>
+          <span className="text-[11px] font-mono text-stone-300 border-l border-white/20 pl-3">
+            0{activeSceneIndex + 1} / 0{tenant.hero.scenes.length}
+          </span>
         </div>
       </section>
 
