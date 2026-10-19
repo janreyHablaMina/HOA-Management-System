@@ -39,8 +39,9 @@ export const HOA_TENANTS: HoaTenantConfig[] = [
         {
           id: "scene-avenue",
           label: "Grand Parkway & Estates",
-          title: "Tree-Lined Limestone Boulevards & Custom Residences",
-          subtitle: "485 thoughtfully sited custom homes across five distinct residential enclaves.",
+          title: "Timeless Residential Living Under a Century-Old Live Oak Canopy.",
+          subtitle:
+            "Spanning 420 acres of rolling limestone hills and protected botanical greenbelts, The Estates at Veridian Grove blends custom architectural craftsmanship with resort-caliber amenities.",
           imageUrl:
             "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1800&q=85",
           caption: "The Preserve Enclave — Custom Limestone & Cedar Residence on Veridian Ridge",
@@ -49,8 +50,9 @@ export const HOA_TENANTS: HoaTenantConfig[] = [
         {
           id: "scene-pavilion",
           label: "Conservatory & Aquatics",
-          title: "The Veridian Pavilion & Zero-Edge Resort Pool",
-          subtitle: "Heated lap lanes, cabanas, and year-round lakeside gathering terraces.",
+          title: "Private Lakeside Conservatory & Heated Resort Aquatics.",
+          subtitle:
+            "Geothermally heated lap lanes, shaded limestone cabanas, demonstration catering salons, and sunset verandas overlooking Sycamore Creek.",
           imageUrl:
             "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1800&q=85",
           caption: "South Terrace at The Veridian Clubhouse & Resident Aquatics Sanctuary",
@@ -58,9 +60,10 @@ export const HOA_TENANTS: HoaTenantConfig[] = [
         },
         {
           id: "scene-trails",
-          label: "Greenbelt & Pocket Parks",
-          title: "14 Miles of Protected Creek & Botanical Trails",
-          subtitle: "Interconnected pedestrian paths linking every village to nature preserves.",
+          label: "Greenbelt & Nature Trails",
+          title: "14 Miles of Spring-Fed Creek & Protected Botanical Trails.",
+          subtitle:
+            "Interconnected crushed-granite pathways meandering beneath 200-year-old live oaks, limestone waterfalls, and peaceful neighborhood pocket parks.",
           imageUrl:
             "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1800&q=85",
           caption: "Sycamore Creek Overlook & Resident Botanical Meadow",

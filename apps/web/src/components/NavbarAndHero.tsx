@@ -361,18 +361,13 @@ export default function NavbarAndHero({
 
         {/* Center Editorial Hero Content */}
         <div className="relative z-10 max-w-[1440px] w-full mx-auto px-6 sm:px-12 py-8 text-white">
-          <div className="max-w-3xl space-y-6 animate-fade-up">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-medium text-stone-200 bg-black/40 border border-white/20 backdrop-blur-md">
-              <span className="w-2 h-2 rounded-full bg-emerald-400" />
-              <span>{currentScene.label}</span>
-            </div>
-
+          <div key={currentScene.id} className="max-w-3xl space-y-6 animate-fade-up">
             <h1 className="font-display text-4xl sm:text-6xl xl:text-7xl font-semibold tracking-tight leading-[1.08] text-white drop-shadow-md">
-              {tenant.hero.headline}
+              {currentScene.title}
             </h1>
 
             <p className="text-base sm:text-lg lg:text-xl text-stone-200 leading-relaxed max-w-2xl font-light drop-shadow-sm">
-              {tenant.hero.description}
+              {currentScene.subtitle}
             </p>
 
             {/* Calls to Action */}
@@ -424,26 +419,21 @@ export default function NavbarAndHero({
           <ChevronRight className="w-5 h-5" />
         </button>
 
-        {/* Bottom Slide Indicator Glass Pill */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3 px-4 py-2 rounded-full bg-black/50 backdrop-blur-md border border-white/15">
-          <div className="flex items-center gap-1.5">
-            {tenant.hero.scenes.map((_, idx) => (
-              <button
-                key={idx}
-                type="button"
-                onClick={() => setActiveSceneIndex(idx)}
-                className={`h-1.5 rounded-full transition-all cursor-pointer ${
-                  idx === activeSceneIndex
-                    ? "w-6 bg-white"
-                    : "w-2 bg-white/35 hover:bg-white/70"
-                }`}
-                aria-label={`Go to slide ${idx + 1}`}
-              />
-            ))}
-          </div>
-          <span className="text-[11px] font-mono text-stone-300 border-l border-white/20 pl-3">
-            0{activeSceneIndex + 1} / 0{tenant.hero.scenes.length}
-          </span>
+        {/* Bottom Slide Indicator Dots */}
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 px-3.5 py-2 rounded-full bg-black/50 backdrop-blur-md border border-white/15">
+          {tenant.hero.scenes.map((_, idx) => (
+            <button
+              key={idx}
+              type="button"
+              onClick={() => setActiveSceneIndex(idx)}
+              className={`h-1.5 rounded-full transition-all cursor-pointer ${
+                idx === activeSceneIndex
+                  ? "w-6 bg-white"
+                  : "w-2 bg-white/35 hover:bg-white/70"
+              }`}
+              aria-label={`Go to slide ${idx + 1}`}
+            />
+          ))}
         </div>
       </section>
 
