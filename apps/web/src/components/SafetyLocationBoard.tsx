@@ -1,0 +1,932 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
+import {
+  ShieldCheck,
+  Phone,
+  AlertTriangle,
+  CheckCircle2,
+  MapPin,
+  Navigation,
+  Copy,
+  Check,
+  ExternalLink,
+  Mail,
+  Users,
+  Quote,
+  Compass,
+  Clock,
+  Lock,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
+import { HoaTenantConfig } from "@/types/hoa";
+
+interface SafetyLocationBoardProps {
+  tenant: HoaTenantConfig;
+  onOpenPortalModal: (defaultTab?: "login" | "register" | "demo") => void;
+}
+
+export default function SafetyLocationBoard({
+  tenant,
+  onOpenPortalModal,
+}: SafetyLocationBoardProps) {
+  // Section 10: Interactive Map Pin state
+  const [selectedPinId, setSelectedPinId] = useState<string>(
+    tenant.location.mapPins[0]?.id || ""
+  );
+  const [copiedAddress, setCopiedAddress] = useState(false);
+
+  // Section 11: Board / Management role filter
+  const [leadershipFilter, setLeadershipFilter] = useState<
+    "All" | "Board of Directors" | "Management Team"
+  >("All");
+
+  // Section 12: Featured testimonial carousel index
+  const [activeTestimonialIdx, setActiveTestimonialIdx] = useState(0);
+
+  useEffect(() => {
+    setSelectedPinId(tenant.location.mapPins[0]?.id || "");
+    setActiveTestimonialIdx(0);
+  }, [tenant.id, tenant.location.mapPins]);
+
+  const activePin =
+    tenant.location.mapPins.find((p) => p.id === selectedPinId) ||
+    tenant.location.mapPins[0]!;
+
+  const filteredMembers =
+    leadershipFilter === "All"
+      ? tenant.boardAndManagement.members
+      : tenant.boardAndManagement.members.filter(
+          (m) => m.roleType === leadershipFilter
+        );
+
+  const handleCopyAddress = () => {
+    navigator.clipboard?.writeText(tenant.fullAddress);
+    setCopiedAddress(true);
+    setTimeout(() => setCopiedAddress(false), 2500);
+  };
+
+  return (
+    <>
+      {/* SECTION 9: Safety and Security (High-Contrast Dark Architectural Sanctuary) */}
+      <section
+        id="safety"
+        className="py-20 lg:py-28 border-b text-stone-100"
+        style={{
+          backgroundColor: tenant.theme.bgDark,
+          borderColor: "rgba(255,255,255,0.12)",
+        }}
+      >
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-8 space-y-14">
+          {/* Top Header & Live Patrol Status Banner */}
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 border-b border-white/15 pb-10">
+            <div className="space-y-3 max-w-3xl">
+              <div className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-[0.15em] text-amber-300">
+                <ShieldCheck className="w-4 h-4" />
+                <span>CHAPTER VI · SAFETY, GATEHOUSE & COMMUNITY PROTOCOLS</span>
+              </div>
+              <h2 className="font-display text-3xl sm:text-4xl lg:text-[44px] font-semibold tracking-tight leading-[1.12] text-white">
+                {tenant.safety.headline}
+              </h2>
+              <p className="text-sm sm:text-base leading-relaxed text-stone-300">
+                {tenant.safety.subtitle}
+              </p>
+            </div>
+
+            <div className="p-4 sm:p-5 rounded-xl bg-white/8 border border-white/15 backdrop-blur-xs max-w-md space-y-2">
+              <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-emerald-300">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span>{tenant.safety.patrolStatus}</span>
+              </div>
+              <p className="text-xs text-stone-300 leading-relaxed">
+                {tenant.safety.visitorPassNote}
+              </p>
+              <button
+                type="button"
+                onClick={() => onOpenPortalModal("login")}
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-300 hover:text-amber-200 underline pt-1 cursor-pointer"
+              >
+                <Lock className="w-3.5 h-3.5" />
+                <span>Generate Visitor e-Pass in Resident Portal →</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Public Emergency & Security Contact Directory */}
+          <div className="space-y-4">
+            <h3 className="text-xs font-mono uppercase tracking-[0.15em] text-stone-300">
+              APPROVED PUBLIC SECURITY & EMERGENCY CONTACT DIRECTORY
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              {tenant.safety.contacts.map((contact) => (
+                <div
+                  key={contact.role}
+                  className={`p-5 rounded-xl border flex flex-col justify-between transition-all ${
+                    contact.isEmergency
+                      ? "bg-red-950/45 border-red-400/40"
+                      : "bg-white/6 border-white/15 hover:bg-white/10"
+                  }`}
+                >
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between gap-2">
+                      <span
+                        className={`text-[11px] font-mono uppercase tracking-wider px-2 py-0.5 rounded ${
+                          contact.isEmergency
+                            ? "bg-red-500/25 text-red-200 border border-red-400/30"
+                            : "bg-white/10 text-amber-300"
+                        }`}
+                      >
+                        {contact.availability}
+                      </span>
+                      {contact.isEmergency ? (
+                        <AlertTriangle className="w-4 h-4 text-red-300 shrink-0" />
+                      ) : (
+                        <Phone className="w-4 h-4 text-amber-300 shrink-0" />
+                      )}
+                    </div>
+                    <h4 className="font-semibold text-base text-white pt-1">
+                      {contact.role}
+                    </h4>
+                    <p className="text-xs text-stone-300 leading-relaxed">
+                      {contact.note}
+                    </p>
+                  </div>
+
+                  <div className="pt-4 mt-4 border-t border-white/10 flex items-center justify-between">
+                    <span className="text-xs text-stone-400">Direct Line:</span>
+                    <a
+                      href={`tel:${contact.phone.replace(/[^0-9]/g, "")}`}
+                      className="font-mono text-base font-bold text-white hover:text-amber-300 transition-colors"
+                    >
+                      {contact.phone}
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* 3-Column Security & Visitor Policy Guidelines */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {tenant.safety.policies.map((pol) => (
+              <div
+                key={pol.code}
+                className="p-6 sm:p-7 rounded-xl bg-white/6 border border-white/15 space-y-4"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="px-2.5 py-1 rounded text-xs font-mono font-semibold bg-white/10 text-amber-300 border border-white/15">
+                    {pol.code}
+                  </span>
+                  <span className="text-xs font-mono text-stone-400">
+                    PUBLIC POLICY
+                  </span>
+                </div>
+                <h3 className="font-display text-2xl font-semibold text-white">
+                  {pol.title}
+                </h3>
+                <p className="text-xs sm:text-sm text-stone-300 leading-relaxed">
+                  {pol.summary}
+                </p>
+                <ul className="space-y-2.5 pt-2 border-t border-white/10">
+                  {pol.bullets.map((b) => (
+                    <li
+                      key={b}
+                      className="text-xs sm:text-sm text-stone-200 flex items-start gap-2.5"
+                    >
+                      <CheckCircle2 className="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" />
+                      <span>{b}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 10: Location and Directions (Interactive Subdivision Map & Landmarks) */}
+      <section
+        id="location"
+        className="py-20 lg:py-28 border-b"
+        style={{
+          backgroundColor: tenant.theme.bgPrimary,
+          borderColor: tenant.theme.borderSubtle,
+        }}
+      >
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-8 space-y-14">
+          {/* Header & Address Copy Bar */}
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+            <div className="space-y-3 max-w-2xl">
+              <p
+                className="text-xs font-mono uppercase tracking-[0.15em]"
+                style={{ color: tenant.theme.accentSecondary }}
+              >
+                CHAPTER VII · GEOGRAPHY, MASTER PLAN & DIRECTIONS
+              </p>
+              <h2
+                className="font-display text-3xl sm:text-4xl lg:text-[44px] font-semibold tracking-tight leading-[1.12]"
+                style={{ color: tenant.theme.textPrimary }}
+              >
+                {tenant.location.headline}
+              </h2>
+              <p
+                className="text-sm sm:text-base leading-relaxed"
+                style={{ color: tenant.theme.textSecondary }}
+              >
+                {tenant.location.subtitle}
+              </p>
+            </div>
+
+            {/* Official Address & Action Buttons */}
+            <div
+              className="p-4 sm:p-5 rounded-xl border flex flex-col sm:flex-row sm:items-center gap-4"
+              style={{
+                backgroundColor: tenant.theme.bgSecondary,
+                borderColor: tenant.theme.borderSubtle,
+              }}
+            >
+              <div className="space-y-1">
+                <p
+                  className="text-[11px] font-mono uppercase tracking-wider"
+                  style={{ color: tenant.theme.accentSecondary }}
+                >
+                  MAIN GATEHOUSE & VISITORS ADDRESS
+                </p>
+                <p
+                  className="text-sm font-semibold"
+                  style={{ color: tenant.theme.textPrimary }}
+                >
+                  {tenant.fullAddress}
+                </p>
+                <p
+                  className="text-xs font-mono"
+                  style={{ color: tenant.theme.textSecondary }}
+                >
+                  GPS: {tenant.gpsCoordinates}
+                </p>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <button
+                  type="button"
+                  onClick={handleCopyAddress}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-md border text-xs font-semibold transition-colors hover:bg-black/5 cursor-pointer"
+                  style={{
+                    backgroundColor: tenant.theme.bgPrimary,
+                    borderColor: tenant.theme.borderSubtle,
+                    color: tenant.theme.textPrimary,
+                  }}
+                >
+                  {copiedAddress ? (
+                    <>
+                      <Check className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>Copied</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-3.5 h-3.5" />
+                      <span>Copy Address</span>
+                    </>
+                  )}
+                </button>
+                <a
+                  href={`https://maps.google.com/?q=${encodeURIComponent(
+                    tenant.fullAddress
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-md text-xs font-semibold text-white transition-opacity hover:opacity-90"
+                  style={{ backgroundColor: tenant.theme.accentPrimary }}
+                >
+                  <span>Google Maps</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Interactive Subdivision Master Map + Pin Inspector */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+            {/* Left 8 Columns: Interactive Illustrated Subdivision Map */}
+            <div
+              className="lg:col-span-8 rounded-xl overflow-hidden border relative min-h-[420px] sm:min-h-[480px] flex flex-col justify-between p-5 sm:p-6"
+              style={{
+                backgroundColor: "#192921",
+                borderColor: tenant.theme.borderSubtle,
+              }}
+            >
+              {/* Architectural Topographic SVG Map Layer */}
+              <svg
+                className="absolute inset-0 w-full h-full object-cover opacity-35 pointer-events-none"
+                viewBox="0 0 800 500"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                {/* Topographic contour lines & greenbelt creek */}
+                <path
+                  d="M-50 120 C 180 90, 320 220, 540 160 C 680 120, 750 200, 860 180"
+                  stroke="#689F80"
+                  strokeWidth="1.5"
+                  strokeDasharray="6 6"
+                />
+                <path
+                  d="M-40 340 C 190 290, 410 420, 620 310 C 720 260, 780 320, 850 290"
+                  stroke="#689F80"
+                  strokeWidth="1.5"
+                  strokeDasharray="6 6"
+                />
+                {/* Sycamore Creek / Waterway */}
+                <path
+                  d="M 80 0 C 160 140, 210 260, 180 360 C 160 430, 240 480, 310 510"
+                  stroke="#3B7A9E"
+                  strokeWidth="14"
+                  strokeLinecap="round"
+                  strokeOpacity="0.45"
+                />
+                {/* Main Parkway Loop */}
+                <path
+                  d="M 415 0 L 415 110 C 415 190, 360 230, 385 280 C 410 330, 490 360, 495 450 L 495 500"
+                  stroke="#D4A373"
+                  strokeWidth="6"
+                  strokeLinecap="round"
+                />
+                {/* Enclave Side Roads */}
+                <path
+                  d="M 385 250 C 480 230, 560 190, 660 175"
+                  stroke="#E4DFD5"
+                  strokeWidth="3.5"
+                  strokeOpacity="0.6"
+                />
+                <path
+                  d="M 390 270 C 300 290, 240 320, 180 340"
+                  stroke="#E4DFD5"
+                  strokeWidth="3.5"
+                  strokeOpacity="0.6"
+                />
+                {/* Subdivision Perimeter Boundary */}
+                <rect
+                  x="40"
+                  y="30"
+                  width="720"
+                  height="440"
+                  rx="24"
+                  stroke="#D4A373"
+                  strokeWidth="1.5"
+                  strokeDasharray="10 6"
+                  strokeOpacity="0.55"
+                />
+              </svg>
+
+              {/* Top Map Legend Bar */}
+              <div className="relative z-10 flex flex-wrap items-center justify-between gap-2">
+                <div className="px-3.5 py-1.5 rounded-md bg-black/65 backdrop-blur-md border border-white/15 text-xs font-mono text-stone-200 flex items-center gap-2">
+                  <Compass className="w-4 h-4 text-amber-400" />
+                  <span>INTERACTIVE SUBDIVISION MASTER PLAN · CLICK ANY PIN</span>
+                </div>
+                <span className="px-3 py-1 rounded-md bg-emerald-950/85 border border-emerald-400/30 text-[11px] font-mono text-emerald-200">
+                  Scale: 142-Acre Protected Greenbelt
+                </span>
+              </div>
+
+              {/* Interactive Map Pins */}
+              <div className="relative z-10 flex-1 my-4">
+                {tenant.location.mapPins.map((pin, idx) => {
+                  const isSelected = pin.id === activePin.id;
+                  return (
+                    <button
+                      key={pin.id}
+                      type="button"
+                      onClick={() => setSelectedPinId(pin.id)}
+                      style={{
+                        left: `${pin.xPercent}%`,
+                        top: `${pin.yPercent}%`,
+                      }}
+                      className={`-translate-x-1/2 -translate-y-1/2 absolute group flex items-center gap-2 px-3 py-1.5 rounded-full font-mono text-xs font-semibold transition-all cursor-pointer shadow-lg ${
+                        isSelected
+                          ? "bg-amber-400 text-stone-950 scale-110 ring-4 ring-amber-400/30 z-20"
+                          : "bg-stone-900/90 text-white border border-white/25 hover:scale-105 hover:bg-stone-800 z-10"
+                      }`}
+                    >
+                      <span
+                        className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${
+                          isSelected
+                            ? "bg-stone-950 text-amber-300"
+                            : "bg-amber-500/25 text-amber-300"
+                        }`}
+                      >
+                        0{idx + 1}
+                      </span>
+                      <span className="hidden sm:inline whitespace-nowrap">
+                        {pin.name.split("&")[0]}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Bottom Selected Pin Detail Overlay */}
+              <div className="relative z-10 p-4 sm:p-5 rounded-xl bg-black/75 backdrop-blur-md border border-white/15 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2 text-xs font-mono text-amber-300">
+                    <span>SELECTED WAYPOINT: {activePin.category.toUpperCase()}</span>
+                    <span>·</span>
+                    <span>{activePin.hoursOrDistance}</span>
+                  </div>
+                  <h3 className="font-display text-xl sm:text-2xl font-semibold">
+                    {activePin.name}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-stone-300">
+                    {activePin.description}
+                  </p>
+                </div>
+                <div className="shrink-0 text-right">
+                  <span className="inline-block px-3 py-1.5 rounded bg-white/10 border border-white/15 text-xs font-mono text-stone-200">
+                    {activePin.addressOrZone}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right 4 Columns: Waypoint Directory & Turn-by-Turn Directions */}
+            <div className="lg:col-span-4 flex flex-col justify-between gap-6">
+              <div
+                className="p-6 rounded-xl border space-y-4"
+                style={{
+                  backgroundColor: tenant.theme.bgSecondary,
+                  borderColor: tenant.theme.borderSubtle,
+                }}
+              >
+                <h3
+                  className="text-xs font-mono uppercase tracking-[0.15em] font-semibold"
+                  style={{ color: tenant.theme.accentPrimary }}
+                >
+                  SUBDIVISION WAYPOINTS ({tenant.location.mapPins.length})
+                </h3>
+                <div className="space-y-2">
+                  {tenant.location.mapPins.map((pin, index) => {
+                    const isSelected = pin.id === activePin.id;
+                    return (
+                      <button
+                        key={pin.id}
+                        type="button"
+                        onClick={() => setSelectedPinId(pin.id)}
+                        className={`w-full text-left p-3 rounded-lg border transition-all flex items-start justify-between gap-3 cursor-pointer ${
+                          isSelected ? "shadow-xs" : "opacity-80 hover:opacity-100"
+                        }`}
+                        style={{
+                          backgroundColor: isSelected
+                            ? tenant.theme.bgPrimary
+                            : "transparent",
+                          borderColor: isSelected
+                            ? tenant.theme.accentSecondary
+                            : tenant.theme.borderSubtle,
+                        }}
+                      >
+                        <div>
+                          <p
+                            className="text-xs font-semibold"
+                            style={{ color: tenant.theme.textPrimary }}
+                          >
+                            0{index + 1}. {pin.name}
+                          </p>
+                          <p
+                            className="text-[11px] font-mono mt-0.5"
+                            style={{ color: tenant.theme.textSecondary }}
+                          >
+                            {pin.addressOrZone}
+                          </p>
+                        </div>
+                        <MapPin
+                          className="w-4 h-4 shrink-0 mt-0.5"
+                          style={{
+                            color: isSelected
+                              ? tenant.theme.accentSecondary
+                              : tenant.theme.textSecondary,
+                          }}
+                        />
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Driving Directions Card */}
+              <div
+                className="p-6 rounded-xl border space-y-3"
+                style={{
+                  backgroundColor: tenant.theme.bgSecondary,
+                  borderColor: tenant.theme.borderSubtle,
+                }}
+              >
+                <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider font-semibold"
+                  style={{ color: tenant.theme.accentSecondary }}
+                >
+                  <Navigation className="w-3.5 h-3.5" />
+                  <span>Arrival & Gatehouse Directions</span>
+                </div>
+                <p className="text-xs leading-relaxed" style={{ color: tenant.theme.textPrimary }}>
+                  <strong>From the North:</strong> {tenant.location.directionsFromNorth}
+                </p>
+                <p className="text-xs leading-relaxed" style={{ color: tenant.theme.textPrimary }}>
+                  <strong>From the South:</strong> {tenant.location.directionsFromSouth}
+                </p>
+                <p
+                  className="text-[11px] pt-2 border-t italic"
+                  style={{
+                    borderColor: tenant.theme.borderSubtle,
+                    color: tenant.theme.textSecondary,
+                  }}
+                >
+                  {tenant.location.transitAndAccessNote}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Nearby Landmarks & Proximity Matrix */}
+          <div className="space-y-4">
+            <h3
+              className="text-xs font-mono uppercase tracking-[0.15em]"
+              style={{ color: tenant.theme.textSecondary }}
+            >
+              SURROUNDING SCHOOLS, HEALTHCARE, SHOPPING & REGIONAL LANDMARKS
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {tenant.location.nearbyLandmarks.map((lm) => (
+                <div
+                  key={lm.name}
+                  className="p-4 rounded-xl border flex items-center justify-between gap-4"
+                  style={{
+                    backgroundColor: tenant.theme.bgSecondary,
+                    borderColor: tenant.theme.borderSubtle,
+                  }}
+                >
+                  <div>
+                    <span
+                      className="text-[10px] font-mono uppercase tracking-wider"
+                      style={{ color: tenant.theme.accentSecondary }}
+                    >
+                      {lm.category}
+                    </span>
+                    <h4
+                      className="text-sm font-semibold mt-0.5"
+                      style={{ color: tenant.theme.textPrimary }}
+                    >
+                      {lm.name}
+                    </h4>
+                  </div>
+                  <div className="text-right shrink-0 font-mono">
+                    <span
+                      className="block text-sm font-bold"
+                      style={{ color: tenant.theme.accentPrimary }}
+                    >
+                      {lm.driveTime}
+                    </span>
+                    <span
+                      className="block text-[11px]"
+                      style={{ color: tenant.theme.textSecondary }}
+                    >
+                      {lm.distance}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 11: HOA Board and Management */}
+      <section
+        id="governance"
+        className="py-20 lg:py-28 border-b"
+        style={{
+          backgroundColor: tenant.theme.bgSecondary,
+          borderColor: tenant.theme.borderSubtle,
+        }}
+      >
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-8 space-y-12">
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+            <div className="space-y-3 max-w-2xl">
+              <p
+                className="text-xs font-mono uppercase tracking-[0.15em]"
+                style={{ color: tenant.theme.accentSecondary }}
+              >
+                CHAPTER VIII · CIVIC LEADERSHIP & ON-SITE MANAGEMENT
+              </p>
+              <h2
+                className="font-display text-3xl sm:text-4xl lg:text-[44px] font-semibold tracking-tight leading-[1.12]"
+                style={{ color: tenant.theme.textPrimary }}
+              >
+                HOA Board of Directors & Executive Management Team
+              </h2>
+              <p
+                className="text-sm sm:text-base leading-relaxed"
+                style={{ color: tenant.theme.textSecondary }}
+              >
+                {tenant.boardAndManagement.governanceStatement}
+              </p>
+            </div>
+
+            {/* Filter Buttons */}
+            <div className="flex flex-wrap gap-2">
+              {(["All", "Board of Directors", "Management Team"] as const).map(
+                (role) => {
+                  const active = leadershipFilter === role;
+                  return (
+                    <button
+                      key={role}
+                      type="button"
+                      onClick={() => setLeadershipFilter(role)}
+                      className={`px-4 py-2 rounded-md text-xs font-semibold border transition-all cursor-pointer ${
+                        active ? "text-white" : "hover:bg-black/5"
+                      }`}
+                      style={{
+                        backgroundColor: active
+                          ? tenant.theme.accentPrimary
+                          : tenant.theme.bgPrimary,
+                        borderColor: active
+                          ? tenant.theme.accentPrimary
+                          : tenant.theme.borderSubtle,
+                        color: active ? "#FFFFFF" : tenant.theme.textPrimary,
+                      }}
+                    >
+                      {role === "All" ? "All Leadership" : role}
+                    </button>
+                  );
+                }
+              )}
+            </div>
+          </div>
+
+          {/* Open Meeting Schedule Banner */}
+          <div
+            className="p-4 sm:p-5 rounded-xl border flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+            style={{
+              backgroundColor: tenant.theme.bgPrimary,
+              borderColor: tenant.theme.borderSubtle,
+            }}
+          >
+            <div className="flex items-start sm:items-center gap-3">
+              <Clock
+                className="w-5 h-5 shrink-0 mt-0.5 sm:mt-0"
+                style={{ color: tenant.theme.accentSecondary }}
+              />
+              <p className="text-xs sm:text-sm" style={{ color: tenant.theme.textPrimary }}>
+                <strong>Open Governance Policy:</strong>{" "}
+                {tenant.boardAndManagement.meetingSchedule}
+              </p>
+            </div>
+            <span
+              className="text-xs font-mono shrink-0 px-3 py-1 rounded border"
+              style={{
+                borderColor: tenant.theme.borderSubtle,
+                color: tenant.theme.accentPrimary,
+              }}
+            >
+              Next Session: {tenant.nextBoardMeeting.split("·")[0]}
+            </span>
+          </div>
+
+          {/* Board & Management Profile Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredMembers.map((member) => (
+              <div
+                key={member.id}
+                className="rounded-xl overflow-hidden border flex flex-col justify-between transition-all hover:shadow-md"
+                style={{
+                  backgroundColor: tenant.theme.bgPrimary,
+                  borderColor: tenant.theme.borderSubtle,
+                }}
+              >
+                <div className="p-6 space-y-4">
+                  <div className="flex items-center gap-4">
+                    <img
+                      src={member.imageUrl}
+                      alt={member.name}
+                      className="w-16 h-16 rounded-full object-cover border-2 shrink-0"
+                      style={{ borderColor: tenant.theme.accentSecondary }}
+                    />
+                    <div>
+                      <span
+                        className="inline-block px-2 py-0.5 rounded text-[10px] font-mono uppercase tracking-wider"
+                        style={{
+                          backgroundColor: tenant.theme.bgSecondary,
+                          color: tenant.theme.accentSecondary,
+                        }}
+                      >
+                        {member.roleType}
+                      </span>
+                      <h3
+                        className="font-display text-xl font-semibold mt-0.5"
+                        style={{ color: tenant.theme.textPrimary }}
+                      >
+                        {member.name}
+                      </h3>
+                      <p
+                        className="text-xs font-semibold"
+                        style={{ color: tenant.theme.accentPrimary }}
+                      >
+                        {member.position}
+                      </p>
+                    </div>
+                  </div>
+
+                  <p
+                    className="text-[11px] font-mono py-1.5 border-y"
+                    style={{
+                      borderColor: tenant.theme.borderSubtle,
+                      color: tenant.theme.textSecondary,
+                    }}
+                  >
+                    {member.termOrDepartment}
+                  </p>
+
+                  <p
+                    className="text-xs sm:text-sm leading-relaxed"
+                    style={{ color: tenant.theme.textSecondary }}
+                  >
+                    {member.bio}
+                  </p>
+
+                  <div className="flex flex-wrap gap-1.5 pt-1">
+                    {member.focusAreas.map((area) => (
+                      <span
+                        key={area}
+                        className="px-2.5 py-0.5 rounded text-[11px] border"
+                        style={{
+                          backgroundColor: tenant.theme.bgSecondary,
+                          borderColor: tenant.theme.borderSubtle,
+                          color: tenant.theme.textPrimary,
+                        }}
+                      >
+                        {area}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div
+                  className="px-6 py-3.5 border-t flex items-center justify-between text-xs"
+                  style={{
+                    backgroundColor: `${tenant.theme.bgSecondary}66`,
+                    borderColor: tenant.theme.borderSubtle,
+                  }}
+                >
+                  <span style={{ color: tenant.theme.textSecondary }}>
+                    Official Public Desk:
+                  </span>
+                  <a
+                    href={`mailto:${member.publicEmail}`}
+                    className="inline-flex items-center gap-1.5 font-mono font-medium hover:underline"
+                    style={{ color: tenant.theme.accentPrimary }}
+                  >
+                    <Mail className="w-3.5 h-3.5" />
+                    <span>{member.publicEmail}</span>
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 12: Resident Testimonials */}
+      <section
+        id="testimonials"
+        className="py-20 lg:py-28 border-b"
+        style={{
+          backgroundColor: tenant.theme.bgPrimary,
+          borderColor: tenant.theme.borderSubtle,
+        }}
+      >
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-8 space-y-12">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
+            <div className="space-y-3 max-w-2xl">
+              <p
+                className="text-xs font-mono uppercase tracking-[0.15em]"
+                style={{ color: tenant.theme.accentSecondary }}
+              >
+                CHAPTER IX · HOMEOWNER VOICES & NEIGHBORHOOD PERSPECTIVES
+              </p>
+              <h2
+                className="font-display text-3xl sm:text-4xl lg:text-[44px] font-semibold tracking-tight leading-[1.12]"
+                style={{ color: tenant.theme.textPrimary }}
+              >
+                Why Families Love Calling {tenant.shortName} Home
+              </h2>
+            </div>
+
+            {/* Carousel Controls */}
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() =>
+                  setActiveTestimonialIdx(
+                    (activeTestimonialIdx - 1 + tenant.testimonials.length) %
+                      tenant.testimonials.length
+                  )
+                }
+                className="p-2.5 rounded-md border hover:bg-black/5 cursor-pointer"
+                style={{ borderColor: tenant.theme.borderSubtle }}
+                aria-label="Previous testimonial"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <span className="text-xs font-mono px-2" style={{ color: tenant.theme.textSecondary }}>
+                0{activeTestimonialIdx + 1} / 0{tenant.testimonials.length}
+              </span>
+              <button
+                type="button"
+                onClick={() =>
+                  setActiveTestimonialIdx(
+                    (activeTestimonialIdx + 1) % tenant.testimonials.length
+                  )
+                }
+                className="p-2.5 rounded-md border hover:bg-black/5 cursor-pointer"
+                style={{ borderColor: tenant.theme.borderSubtle }}
+                aria-label="Next testimonial"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
+          {/* 3-Column Homeowner Testimonial Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {tenant.testimonials.map((item, idx) => {
+              const isHighlighted = idx === activeTestimonialIdx;
+              return (
+                <div
+                  key={item.id}
+                  onClick={() => setActiveTestimonialIdx(idx)}
+                  className={`p-7 rounded-xl border flex flex-col justify-between transition-all cursor-pointer ${
+                    isHighlighted ? "shadow-md -translate-y-1" : "opacity-85 hover:opacity-100"
+                  }`}
+                  style={{
+                    backgroundColor: tenant.theme.bgSecondary,
+                    borderColor: isHighlighted
+                      ? tenant.theme.accentSecondary
+                      : tenant.theme.borderSubtle,
+                  }}
+                >
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <span
+                        className="px-2.5 py-1 rounded text-[11px] font-mono font-semibold border"
+                        style={{
+                          backgroundColor: tenant.theme.bgPrimary,
+                          borderColor: tenant.theme.borderSubtle,
+                          color: tenant.theme.accentPrimary,
+                        }}
+                      >
+                        {item.highlightTag}
+                      </span>
+                      <Quote
+                        className="w-6 h-6 opacity-35"
+                        style={{ color: tenant.theme.accentSecondary }}
+                      />
+                    </div>
+
+                    <p
+                      className="font-display text-xl sm:text-2xl italic leading-relaxed"
+                      style={{ color: tenant.theme.textPrimary }}
+                    >
+                      “{item.quote}”
+                    </p>
+                  </div>
+
+                  <div
+                    className="pt-5 mt-6 border-t flex items-center gap-3.5"
+                    style={{ borderColor: tenant.theme.borderSubtle }}
+                  >
+                    <img
+                      src={item.avatarUrl}
+                      alt={item.residentName}
+                      className="w-12 h-12 rounded-full object-cover border"
+                      style={{ borderColor: tenant.theme.accentSecondary }}
+                    />
+                    <div>
+                      <h3
+                        className="text-sm font-semibold capitalize"
+                        style={{ color: tenant.theme.textPrimary }}
+                      >
+                        {item.residentName}
+                      </h3>
+                      <p
+                        className="text-xs font-mono"
+                        style={{ color: tenant.theme.textSecondary }}
+                      >
+                        {item.enclave} · {item.residentSince}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
