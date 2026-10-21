@@ -83,9 +83,90 @@ export default function SafetyLocationBoard({
     },
   }[passType];
 
+  const WAYPOINT_MEDIA: Record<
+    string,
+    {
+      image: string;
+      tagline: string;
+      features: string[];
+    }
+  > = {
+    "pin-main-gate": {
+      image:
+        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85",
+      tagline: "Primary 24/7 Security & Visitor Welcome Hub",
+      features: ["Staffed Officer Desk", "Visitor QR Fast-Lane", "Package Concierge"],
+    },
+    "pin-clubhouse": {
+      image:
+        "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1200&q=85",
+      tagline: "Resort Aquatics & Timber Conservatory",
+      features: ["25m Geothermal Pool", "Resident Lounge", "Fitness Conservatory"],
+    },
+    "pin-courts": {
+      image:
+        "https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?auto=format&fit=crop&w=1200&q=85",
+      tagline: "Championship Racquet & Sports Complex",
+      features: ["4 USTA Courts", "6 Pickleball Courts", "Covered Basketball"],
+    },
+    "pin-trailhead": {
+      image:
+        "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=85",
+      tagline: "142-Acre Protected Creek & Cascades",
+      features: ["14 Miles of Trails", "Wildflower Meadows", "Limestone Bluffs"],
+    },
+    "pin-south-gate": {
+      image:
+        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=85",
+      tagline: "Automated Resident LPR & RFID Boulevard",
+      features: ["High-Speed LPR", "Encrypted Transponder", "Zero-Wait Clearance"],
+    },
+  };
+
+  const getWaypointAsset = (pinId: string, category: string) => {
+    if (WAYPOINT_MEDIA[pinId]) return WAYPOINT_MEDIA[pinId];
+    if (category.toLowerCase().includes("gate")) {
+      return {
+        image:
+          "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85",
+        tagline: "Secure Monitored Entrance & RFID Clearance",
+        features: ["Optical ANPR", "Resident Transponder", "24/7 Monitored"],
+      };
+    }
+    if (category.toLowerCase().includes("club") || category.toLowerCase().includes("pool")) {
+      return {
+        image:
+          "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1200&q=85",
+        tagline: "Community Gathering & Aquatics Center",
+        features: ["Resort Pool", "Social Terrace", "Wellness Center"],
+      };
+    }
+    if (category.toLowerCase().includes("court") || category.toLowerCase().includes("sport")) {
+      return {
+        image:
+          "https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?auto=format&fit=crop&w=1200&q=85",
+        tagline: "Lighted Championship Sports Courts",
+        features: ["Lighted Courts", "Online Booking", "Equipment Locker"],
+      };
+    }
+    return {
+      image:
+        "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=85",
+      tagline: "Scenic Community Nature Trail & Greenbelt",
+      features: ["Crushed Granite Trails", "Rest Benches", "Dog Stations"],
+    };
+  };
+
   const activePin =
     tenant.location.mapPins.find((p) => p.id === selectedPinId) ||
     tenant.location.mapPins[0]!;
+
+  const activePinIndex = Math.max(
+    0,
+    tenant.location.mapPins.findIndex((p) => p.id === activePin.id)
+  );
+
+  const activeAsset = getWaypointAsset(activePin.id, activePin.category);
 
   const filteredMembers =
     leadershipFilter === "All"
@@ -467,91 +548,157 @@ export default function SafetyLocationBoard({
             </div>
           </div>
 
-          {/* Interactive Subdivision Master Map + Pin Inspector */}
+          {/* Interactive Subdivision Master Plan + Photo Inspector Showcase */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-            {/* Left 8 Columns: Interactive Illustrated Subdivision Map */}
+            {/* Left 7 Columns: Architectural Master Plan Canvas */}
             <div
-              className="lg:col-span-8 rounded-xl overflow-hidden border relative min-h-[420px] sm:min-h-[480px] flex flex-col justify-between p-5 sm:p-6"
+              className="lg:col-span-7 rounded-2xl overflow-hidden border relative min-h-[460px] sm:min-h-[520px] flex flex-col justify-between p-5 sm:p-6 shadow-2xl"
               style={{
-                backgroundColor: "#192921",
-                borderColor: tenant.theme.borderSubtle,
+                backgroundColor: "#0b1710",
+                borderColor: "rgba(255,255,255,0.15)",
               }}
             >
-              {/* Architectural Topographic SVG Map Layer */}
+              {/* Topographic Background Texture & Radial Glows */}
+              <div className="absolute inset-0 pointer-events-none opacity-20 bg-[radial-gradient(#d4a373_1px,transparent_1px)] [background-size:24px_24px]" />
+              <div className="absolute -top-24 -left-24 w-96 h-96 bg-emerald-600/15 rounded-full blur-3xl pointer-events-none" />
+              <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+
+              {/* Architectural Topographic & Waterway SVG Layer */}
               <svg
-                className="absolute inset-0 w-full h-full object-cover opacity-35 pointer-events-none"
-                viewBox="0 0 800 500"
+                className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+                viewBox="0 0 800 520"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                {/* Topographic contour lines & greenbelt creek */}
+                {/* Protected Nature Preserve Zones */}
                 <path
-                  d="M-50 120 C 180 90, 320 220, 540 160 C 680 120, 750 200, 860 180"
-                  stroke="#689F80"
-                  strokeWidth="1.5"
-                  strokeDasharray="6 6"
+                  d="M 20 80 C 120 40, 200 120, 260 220 C 310 300, 240 420, 150 480 C 60 520, 10 420, 20 80 Z"
+                  fill="#142c1f"
+                  opacity="0.6"
                 />
                 <path
-                  d="M-40 340 C 190 290, 410 420, 620 310 C 720 260, 780 320, 850 290"
-                  stroke="#689F80"
-                  strokeWidth="1.5"
-                  strokeDasharray="6 6"
+                  d="M 520 40 C 680 20, 780 100, 790 260 C 800 400, 680 480, 540 470 C 480 340, 500 160, 520 40 Z"
+                  fill="#142c1f"
+                  opacity="0.5"
                 />
-                {/* Sycamore Creek / Waterway */}
+
+                {/* Topographic Contour Lines */}
                 <path
-                  d="M 80 0 C 160 140, 210 260, 180 360 C 160 430, 240 480, 310 510"
-                  stroke="#3B7A9E"
-                  strokeWidth="14"
+                  d="M -30 150 C 140 110, 280 240, 480 180 C 620 140, 720 220, 840 200"
+                  stroke="#4e7f63"
+                  strokeWidth="1.5"
+                  strokeDasharray="6 8"
+                  opacity="0.4"
+                />
+                <path
+                  d="M -20 360 C 180 310, 390 440, 600 330 C 700 280, 780 340, 850 310"
+                  stroke="#4e7f63"
+                  strokeWidth="1.5"
+                  strokeDasharray="6 8"
+                  opacity="0.4"
+                />
+
+                {/* Sycamore Creek Riverway */}
+                <path
+                  d="M 120 0 C 190 140, 240 240, 200 350 C 170 430, 250 480, 320 520"
+                  stroke="#38BDF8"
+                  strokeWidth="16"
                   strokeLinecap="round"
-                  strokeOpacity="0.45"
+                  opacity="0.35"
                 />
-                {/* Main Parkway Loop */}
                 <path
-                  d="M 415 0 L 415 110 C 415 190, 360 230, 385 280 C 410 330, 490 360, 495 450 L 495 500"
-                  stroke="#D4A373"
+                  d="M 120 0 C 190 140, 240 240, 200 350 C 170 430, 250 480, 320 520"
+                  stroke="#7DD3FC"
                   strokeWidth="6"
                   strokeLinecap="round"
+                  opacity="0.6"
                 />
-                {/* Enclave Side Roads */}
+
+                {/* Main Veridian Parkway Boulevard Loops */}
                 <path
-                  d="M 385 250 C 480 230, 560 190, 660 175"
-                  stroke="#E4DFD5"
-                  strokeWidth="3.5"
-                  strokeOpacity="0.6"
+                  d="M 415 0 L 415 110 C 415 190, 350 230, 380 280 C 410 330, 490 360, 495 450 L 495 520"
+                  stroke="#D4A373"
+                  strokeWidth="8"
+                  strokeLinecap="round"
+                  opacity="0.85"
                 />
+                {/* Boulevard Centerline */}
                 <path
-                  d="M 390 270 C 300 290, 240 320, 180 340"
-                  stroke="#E4DFD5"
-                  strokeWidth="3.5"
-                  strokeOpacity="0.6"
+                  d="M 415 0 L 415 110 C 415 190, 350 230, 380 280 C 410 330, 490 360, 495 450 L 495 520"
+                  stroke="#0b1710"
+                  strokeWidth="1.5"
+                  strokeDasharray="4 6"
                 />
-                {/* Subdivision Perimeter Boundary */}
+
+                {/* Residential Enclave Roads & Cul-de-Sacs */}
+                <path
+                  d="M 380 260 C 480 240, 560 200, 670 185"
+                  stroke="#F5EBE0"
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                  opacity="0.5"
+                />
+                <circle cx="670" cy="185" r="14" stroke="#F5EBE0" strokeWidth="3" fill="#142c1f" opacity="0.6" />
+
+                <path
+                  d="M 390 290 C 300 310, 240 330, 180 350"
+                  stroke="#F5EBE0"
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                  opacity="0.5"
+                />
+                <circle cx="180" cy="350" r="14" stroke="#F5EBE0" strokeWidth="3" fill="#142c1f" opacity="0.6" />
+
+                <path
+                  d="M 440 380 C 530 400, 600 420, 660 390"
+                  stroke="#F5EBE0"
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                  opacity="0.5"
+                />
+                <circle cx="660" cy="390" r="14" stroke="#F5EBE0" strokeWidth="3" fill="#142c1f" opacity="0.6" />
+
+                {/* Master Plan Boundary */}
                 <rect
-                  x="40"
-                  y="30"
-                  width="720"
-                  height="440"
-                  rx="24"
+                  x="30"
+                  y="20"
+                  width="740"
+                  height="480"
+                  rx="28"
                   stroke="#D4A373"
                   strokeWidth="1.5"
-                  strokeDasharray="10 6"
-                  strokeOpacity="0.55"
+                  strokeDasharray="12 8"
+                  opacity="0.4"
                 />
+
+                {/* District Text Labels */}
+                <text x="50" y="270" fill="#689F80" fontSize="10" fontFamily="monospace" letterSpacing="0.2em" opacity="0.7">
+                  SYCAMORE CREEK PRESERVE
+                </text>
+                <text x="460" y="140" fill="#D4A373" fontSize="10" fontFamily="monospace" letterSpacing="0.2em" opacity="0.7">
+                  CANOPY RIDGE ENCLAVE
+                </text>
+                <text x="360" y="490" fill="#D4A373" fontSize="10" fontFamily="monospace" letterSpacing="0.2em" opacity="0.7">
+                  SOUTH MEADOW TRACE
+                </text>
+                <text x="320" y="220" fill="#F5EBE0" fontSize="11" fontFamily="monospace" fontWeight="bold" letterSpacing="0.15em" opacity="0.8">
+                  CENTRAL COMMONS
+                </text>
               </svg>
 
-              {/* Top Map Legend Bar */}
+              {/* Top Map Legend & Compass Bar */}
               <div className="relative z-10 flex flex-wrap items-center justify-between gap-2">
-                <div className="px-3.5 py-1.5 rounded-md bg-black/65 backdrop-blur-md border border-white/15 text-xs font-mono text-stone-200 flex items-center gap-2">
+                <div className="px-3.5 py-1.5 rounded-lg bg-black/75 backdrop-blur-md border border-white/20 text-xs font-mono text-stone-200 flex items-center gap-2 shadow-lg">
                   <Compass className="w-4 h-4 text-amber-400" />
-                  <span>INTERACTIVE SUBDIVISION MASTER PLAN · CLICK ANY PIN</span>
+                  <span className="font-semibold">INTERACTIVE SUBDIVISION MASTER PLAN</span>
                 </div>
-                <span className="px-3 py-1 rounded-md bg-emerald-950/85 border border-emerald-400/30 text-[11px] font-mono text-emerald-200">
-                  Scale: 142-Acre Protected Greenbelt
+                <span className="px-3 py-1 rounded-lg bg-emerald-950/90 border border-emerald-400/40 text-[11px] font-mono text-emerald-200 shadow-md">
+                  142-Acre Protected Preserve · Scale 1:2500
                 </span>
               </div>
 
-              {/* Interactive Map Pins */}
-              <div className="relative z-10 flex-1 my-4">
+              {/* Interactive Waypoint Pins Layer */}
+              <div className="relative z-10 flex-1 my-6 min-h-[220px]">
                 {tenant.location.mapPins.map((pin, idx) => {
                   const isSelected = pin.id === activePin.id;
                   return (
@@ -563,12 +710,16 @@ export default function SafetyLocationBoard({
                         left: `${pin.xPercent}%`,
                         top: `${pin.yPercent}%`,
                       }}
-                      className={`-translate-x-1/2 -translate-y-1/2 absolute group flex items-center gap-2 px-3 py-1.5 rounded-full font-mono text-xs font-semibold transition-all cursor-pointer shadow-lg ${
+                      className={`-translate-x-1/2 -translate-y-1/2 absolute group flex items-center gap-2 px-3 py-1.5 rounded-full font-mono text-xs font-bold transition-all cursor-pointer shadow-xl ${
                         isSelected
-                          ? "bg-amber-400 text-stone-950 scale-110 ring-4 ring-amber-400/30 z-20"
+                          ? "bg-amber-400 text-stone-950 scale-110 ring-4 ring-amber-400/40 z-30"
                           : "bg-stone-900/90 text-white border border-white/25 hover:scale-105 hover:bg-stone-800 z-10"
                       }`}
                     >
+                      {/* Active Beacon Pulse Ripple */}
+                      {isSelected && (
+                        <span className="absolute -inset-2.5 rounded-full bg-amber-400/50 animate-ping pointer-events-none" />
+                      )}
                       <span
                         className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${
                           isSelected
@@ -579,180 +730,265 @@ export default function SafetyLocationBoard({
                         0{idx + 1}
                       </span>
                       <span className="hidden sm:inline whitespace-nowrap">
-                        {pin.name.split("&")[0]}
+                        {pin.name.split(" ")[0]} {pin.name.split(" ")[1] || ""}
                       </span>
                     </button>
                   );
                 })}
               </div>
 
-              {/* Bottom Selected Pin Detail Overlay */}
-              <div className="relative z-10 p-4 sm:p-5 rounded-xl bg-black/75 backdrop-blur-md border border-white/15 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2 text-xs font-mono text-amber-300">
-                    <span>SELECTED WAYPOINT: {activePin.category.toUpperCase()}</span>
-                    <span>·</span>
-                    <span>{activePin.hoursOrDistance}</span>
-                  </div>
-                  <h3 className="font-display text-xl sm:text-2xl font-semibold">
-                    {activePin.name}
-                  </h3>
-                  <p className="text-xs sm:text-sm text-stone-300">
-                    {activePin.description}
-                  </p>
-                </div>
-                <div className="shrink-0 text-right">
-                  <span className="inline-block px-3 py-1.5 rounded bg-white/10 border border-white/15 text-xs font-mono text-stone-200">
-                    {activePin.addressOrZone}
-                  </span>
-                </div>
+              {/* Bottom Quick-Jump Selector Strip */}
+              <div className="relative z-10 p-2 rounded-xl bg-black/80 backdrop-blur-md border border-white/15 flex items-center gap-1.5 overflow-x-auto no-scrollbar shadow-lg">
+                <span className="text-[10px] font-mono uppercase tracking-wider text-amber-300 px-2 shrink-0 font-semibold">
+                  WAYPOINTS:
+                </span>
+                {tenant.location.mapPins.map((pin, idx) => {
+                  const isSelected = pin.id === activePin.id;
+                  return (
+                    <button
+                      key={pin.id}
+                      type="button"
+                      onClick={() => setSelectedPinId(pin.id)}
+                      className={`px-2.5 py-1 rounded-lg text-xs font-mono font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                        isSelected
+                          ? "bg-amber-400 text-stone-950 shadow-xs font-bold"
+                          : "text-stone-300 hover:text-white hover:bg-white/10"
+                      }`}
+                    >
+                      0{idx + 1}. {pin.name.split(" ")[0]}
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
-            {/* Right 4 Columns: Waypoint Directory & Turn-by-Turn Directions */}
-            <div className="lg:col-span-4 flex flex-col justify-between gap-6">
-              <div
-                className="p-6 rounded-xl border space-y-4"
-                style={{
-                  backgroundColor: tenant.theme.bgSecondary,
-                  borderColor: tenant.theme.borderSubtle,
-                }}
-              >
-                <h3
-                  className="text-xs font-mono uppercase tracking-[0.15em] font-semibold"
-                  style={{ color: tenant.theme.accentPrimary }}
-                >
-                  SUBDIVISION WAYPOINTS ({tenant.location.mapPins.length})
-                </h3>
-                <div className="space-y-2">
-                  {tenant.location.mapPins.map((pin, index) => {
-                    const isSelected = pin.id === activePin.id;
-                    return (
-                      <button
-                        key={pin.id}
-                        type="button"
-                        onClick={() => setSelectedPinId(pin.id)}
-                        className={`w-full text-left p-3 rounded-lg border transition-all flex items-start justify-between gap-3 cursor-pointer ${
-                          isSelected ? "shadow-xs" : "opacity-80 hover:opacity-100"
-                        }`}
-                        style={{
-                          backgroundColor: isSelected
-                            ? tenant.theme.bgPrimary
-                            : "transparent",
-                          borderColor: isSelected
-                            ? tenant.theme.accentSecondary
-                            : tenant.theme.borderSubtle,
-                        }}
-                      >
-                        <div>
-                          <p
-                            className="text-xs font-semibold"
-                            style={{ color: tenant.theme.textPrimary }}
-                          >
-                            0{index + 1}. {pin.name}
-                          </p>
-                          <p
-                            className="text-[11px] font-mono mt-0.5"
-                            style={{ color: tenant.theme.textSecondary }}
-                          >
-                            {pin.addressOrZone}
-                          </p>
-                        </div>
-                        <MapPin
-                          className="w-4 h-4 shrink-0 mt-0.5"
-                          style={{
-                            color: isSelected
-                              ? tenant.theme.accentSecondary
-                              : tenant.theme.textSecondary,
-                          }}
-                        />
-                      </button>
-                    );
-                  })}
+            {/* Right 5 Columns: Waypoint Photo & Amenities Inspector */}
+            <div
+              className="lg:col-span-5 rounded-2xl border overflow-hidden flex flex-col justify-between shadow-2xl transition-all"
+              style={{
+                backgroundColor: tenant.theme.bgSecondary,
+                borderColor: tenant.theme.borderSubtle,
+              }}
+            >
+              {/* Waypoint Photo Header Window */}
+              <div className="relative h-64 sm:h-72 w-full overflow-hidden group bg-stone-950">
+                <img
+                  src={activeAsset.image}
+                  alt={activePin.name}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/40 to-black/30" />
+
+                {/* Top Badges */}
+                <div className="absolute top-4 inset-x-4 flex items-center justify-between gap-2">
+                  <span className="px-2.5 py-1 rounded-md bg-black/60 backdrop-blur-md border border-white/20 text-[10px] font-mono font-bold uppercase tracking-wider text-amber-300">
+                    {activePin.category}
+                  </span>
+                  <span className="px-2.5 py-1 rounded-md bg-emerald-950/80 backdrop-blur-md border border-emerald-400/30 text-[10px] font-mono font-semibold text-emerald-200">
+                    ● {activePin.hoursOrDistance}
+                  </span>
+                </div>
+
+                {/* Bottom Waypoint Title & Index Pill */}
+                <div className="absolute bottom-4 inset-x-4 space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="w-5 h-5 rounded-full bg-amber-400 text-stone-950 text-[10px] font-bold font-mono flex items-center justify-center">
+                      0{activePinIndex + 1}
+                    </span>
+                    <span className="text-[11px] font-mono text-stone-300">
+                      Waypoint Identification
+                    </span>
+                  </div>
+                  <h3 className="font-display text-xl sm:text-2xl font-bold text-white leading-tight">
+                    {activePin.name}
+                  </h3>
                 </div>
               </div>
 
-              {/* Driving Directions Card */}
-              <div
-                className="p-6 rounded-xl border space-y-3"
-                style={{
-                  backgroundColor: tenant.theme.bgSecondary,
-                  borderColor: tenant.theme.borderSubtle,
-                }}
-              >
-                <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider font-semibold"
-                  style={{ color: tenant.theme.accentSecondary }}
+              {/* Waypoint Details Panel */}
+              <div className="p-6 space-y-5 flex-1 flex flex-col justify-between">
+                <div className="space-y-4">
+                  <div className="space-y-1">
+                    <p
+                      className="text-xs font-mono uppercase tracking-wider font-semibold"
+                      style={{ color: tenant.theme.accentSecondary }}
+                    >
+                      {activeAsset.tagline}
+                    </p>
+                    <p
+                      className="text-sm leading-relaxed"
+                      style={{ color: tenant.theme.textSecondary }}
+                    >
+                      {activePin.description}
+                    </p>
+                  </div>
+
+                  {/* Address Pill */}
+                  <div
+                    className="p-3 rounded-xl border flex items-center gap-2.5 text-xs font-mono"
+                    style={{
+                      backgroundColor: tenant.theme.bgPrimary,
+                      borderColor: tenant.theme.borderSubtle,
+                      color: tenant.theme.textPrimary,
+                    }}
+                  >
+                    <MapPin className="w-4 h-4 text-amber-400 shrink-0" />
+                    <span className="truncate">{activePin.addressOrZone}</span>
+                  </div>
+
+                  {/* Feature Badges */}
+                  <div className="flex flex-wrap gap-1.5">
+                    {activeAsset.features.map((feat) => (
+                      <span
+                        key={feat}
+                        className="px-2.5 py-1 rounded-md border text-[11px] font-medium"
+                        style={{
+                          backgroundColor: tenant.theme.bgPrimary,
+                          borderColor: tenant.theme.borderSubtle,
+                          color: tenant.theme.textPrimary,
+                        }}
+                      >
+                        ✓ {feat}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Google Maps External Direction Button */}
+                <a
+                  href={`https://maps.google.com/?q=${encodeURIComponent(
+                    activePin.name + " " + tenant.fullAddress
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full py-3 rounded-xl font-bold text-xs text-white transition-opacity hover:opacity-90 flex items-center justify-center gap-2 shadow-md cursor-pointer"
+                  style={{ backgroundColor: tenant.theme.accentPrimary }}
                 >
                   <Navigation className="w-3.5 h-3.5" />
-                  <span>Arrival & Gatehouse Directions</span>
-                </div>
-                <p className="text-xs leading-relaxed" style={{ color: tenant.theme.textPrimary }}>
-                  <strong>From the North:</strong> {tenant.location.directionsFromNorth}
-                </p>
-                <p className="text-xs leading-relaxed" style={{ color: tenant.theme.textPrimary }}>
-                  <strong>From the South:</strong> {tenant.location.directionsFromSouth}
-                </p>
-                <p
-                  className="text-[11px] pt-2 border-t italic"
-                  style={{
-                    borderColor: tenant.theme.borderSubtle,
-                    color: tenant.theme.textSecondary,
-                  }}
-                >
-                  {tenant.location.transitAndAccessNote}
-                </p>
+                  <span>Get Directions to {activePin.name.split(" ")[0]} →</span>
+                </a>
               </div>
             </div>
           </div>
 
-          {/* Nearby Landmarks & Proximity Matrix */}
-          <div className="space-y-4">
-            <h3
-              className="text-xs font-mono uppercase tracking-[0.15em]"
-              style={{ color: tenant.theme.textSecondary }}
+          {/* Underneath: Arrival Guidelines & Regional Landmarks Matrix */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            {/* Left 6 Columns: Arrival Guidelines & Gatehouse Directions */}
+            <div
+              className="lg:col-span-6 p-6 sm:p-7 rounded-2xl border space-y-4 shadow-sm"
+              style={{
+                backgroundColor: tenant.theme.bgSecondary,
+                borderColor: tenant.theme.borderSubtle,
+              }}
             >
-              SURROUNDING SCHOOLS, HEALTHCARE, SHOPPING & REGIONAL LANDMARKS
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {tenant.location.nearbyLandmarks.map((lm) => (
+              <div
+                className="flex items-center gap-2 text-xs font-mono uppercase tracking-[0.15em] font-bold"
+                style={{ color: tenant.theme.accentSecondary }}
+              >
+                <Navigation className="w-4 h-4" />
+                <span>GATEHOUSE ARRIVAL & TRANSIT GUIDELINES</span>
+              </div>
+
+              <div className="space-y-3 text-xs sm:text-sm">
                 <div
-                  key={lm.name}
-                  className="p-4 rounded-xl border flex items-center justify-between gap-4"
+                  className="p-3.5 rounded-xl border space-y-1"
                   style={{
-                    backgroundColor: tenant.theme.bgSecondary,
+                    backgroundColor: tenant.theme.bgPrimary,
                     borderColor: tenant.theme.borderSubtle,
                   }}
                 >
-                  <div>
-                    <span
-                      className="text-[10px] font-mono uppercase tracking-wider"
-                      style={{ color: tenant.theme.accentSecondary }}
-                    >
-                      {lm.category}
-                    </span>
-                    <h4
-                      className="text-sm font-semibold mt-0.5"
-                      style={{ color: tenant.theme.textPrimary }}
-                    >
-                      {lm.name}
-                    </h4>
-                  </div>
-                  <div className="text-right shrink-0 font-mono">
-                    <span
-                      className="block text-sm font-bold"
-                      style={{ color: tenant.theme.accentPrimary }}
-                    >
-                      {lm.driveTime}
-                    </span>
-                    <span
-                      className="block text-[11px]"
-                      style={{ color: tenant.theme.textSecondary }}
-                    >
-                      {lm.distance}
-                    </span>
-                  </div>
+                  <span className="font-bold font-mono text-[11px] uppercase tracking-wider text-amber-500 block">
+                    From the North (Loop 360 / Capital of Texas Hwy):
+                  </span>
+                  <p style={{ color: tenant.theme.textPrimary }} className="leading-relaxed">
+                    {tenant.location.directionsFromNorth}
+                  </p>
                 </div>
-              ))}
+
+                <div
+                  className="p-3.5 rounded-xl border space-y-1"
+                  style={{
+                    backgroundColor: tenant.theme.bgPrimary,
+                    borderColor: tenant.theme.borderSubtle,
+                  }}
+                >
+                  <span className="font-bold font-mono text-[11px] uppercase tracking-wider text-amber-500 block">
+                    From the South (Mopac Expressway / Highway 290):
+                  </span>
+                  <p style={{ color: tenant.theme.textPrimary }} className="leading-relaxed">
+                    {tenant.location.directionsFromSouth}
+                  </p>
+                </div>
+              </div>
+
+              <p
+                className="text-xs pt-2 border-t italic leading-relaxed"
+                style={{
+                  borderColor: tenant.theme.borderSubtle,
+                  color: tenant.theme.textSecondary,
+                }}
+              >
+                ℹ {tenant.location.transitAndAccessNote}
+              </p>
+            </div>
+
+            {/* Right 6 Columns: Surrounding Regional Landmarks Matrix */}
+            <div
+              className="lg:col-span-6 p-6 sm:p-7 rounded-2xl border space-y-4 shadow-sm"
+              style={{
+                backgroundColor: tenant.theme.bgSecondary,
+                borderColor: tenant.theme.borderSubtle,
+              }}
+            >
+              <div
+                className="flex items-center gap-2 text-xs font-mono uppercase tracking-[0.15em] font-bold"
+                style={{ color: tenant.theme.accentSecondary }}
+              >
+                <MapPin className="w-4 h-4" />
+                <span>SURROUNDING SCHOOLS, AIRPORT & REGIONAL COMMUTES</span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {tenant.location.nearbyLandmarks.map((lm) => (
+                  <div
+                    key={lm.name}
+                    className="p-3 rounded-xl border flex items-center justify-between gap-3"
+                    style={{
+                      backgroundColor: tenant.theme.bgPrimary,
+                      borderColor: tenant.theme.borderSubtle,
+                    }}
+                  >
+                    <div className="min-w-0">
+                      <span
+                        className="text-[9px] font-mono uppercase tracking-wider block font-bold"
+                        style={{ color: tenant.theme.accentSecondary }}
+                      >
+                        {lm.category}
+                      </span>
+                      <h4
+                        className="text-xs font-semibold truncate mt-0.5"
+                        style={{ color: tenant.theme.textPrimary }}
+                      >
+                        {lm.name}
+                      </h4>
+                    </div>
+                    <div className="text-right shrink-0 font-mono">
+                      <span
+                        className="block text-xs font-bold"
+                        style={{ color: tenant.theme.accentPrimary }}
+                      >
+                        {lm.driveTime}
+                      </span>
+                      <span
+                        className="block text-[10px]"
+                        style={{ color: tenant.theme.textSecondary }}
+                      >
+                        {lm.distance}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
