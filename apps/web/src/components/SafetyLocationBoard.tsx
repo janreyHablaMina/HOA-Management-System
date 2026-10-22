@@ -23,6 +23,9 @@ import {
   Car,
   Radio,
   Sparkles,
+  Smartphone,
+  Share2,
+  Wifi,
 } from "lucide-react";
 import { HoaTenantConfig } from "@/types/hoa";
 
@@ -109,25 +112,36 @@ export default function SafetyLocationBoard({
 
   return (
     <>
-      {/* SECTION 9: Safety, Live Gatehouse Command & Interactive Visitor e-Pass Hub */}
+      {/* SECTION 9: Safety, Gatehouse Command & Mobile App Mockup Showcase */}
       <section
         id="safety"
         className="py-20 lg:py-28 border-b text-stone-100 relative overflow-hidden"
         style={{
-          backgroundColor: tenant.theme.bgDark,
+          backgroundColor: "#0d1612",
           borderColor: "rgba(255,255,255,0.12)",
         }}
       >
+        {/* Luxury Gatehouse Architectural Photo Background with Multi-Layer Cinematic Gradients */}
+        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+          <img
+            src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1920&q=85"
+            alt="Veridian Grove Gatehouse Boulevard"
+            className="w-full h-full object-cover opacity-20 scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0d1612] via-[#0d1612]/95 to-[#0d1612]/80" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0d1612] via-transparent to-[#0d1612]/70" />
+        </div>
+
         <div className="max-w-[1440px] mx-auto px-4 sm:px-8 space-y-12 relative z-10">
           {/* Top Header & Live Telemetry Badge */}
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 border-b border-white/15 pb-8">
             <div className="space-y-3 max-w-3xl">
               <div className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-[0.15em] text-amber-300">
                 <ShieldCheck className="w-4 h-4" />
-                <span>GATEHOUSE COMMAND & VISITOR ACCESS</span>
+                <span>24/7 GATEHOUSE COMMAND & MOBILE ACCESS</span>
               </div>
               <h2 className="font-display text-3xl sm:text-4xl lg:text-[44px] font-semibold tracking-tight leading-[1.12] text-white">
-                {tenant.safety.headline}
+                Seamless Gate Entry in the Palm of Your Hand.
               </h2>
               <p className="text-sm sm:text-base leading-relaxed text-stone-300">
                 {tenant.safety.subtitle}
@@ -147,19 +161,19 @@ export default function SafetyLocationBoard({
             </div>
           </div>
 
-          {/* Main 12-Col Interactive Hub: Live Gate Status + Protocol Tabs (Left 7 Cols) | Interactive QR Visitor Pass Preview (Right 5 Cols) */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+          {/* Main 12-Col Showcase: Gatehouse Telemetry & Protocols (Left 7 Cols) | Realistic Smartphone Device Mockup (Right 5 Cols) */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             {/* Left 7 Columns: Live Gate Lanes & Interactive Protocol Switcher */}
-            <div className="lg:col-span-7 flex flex-col justify-between space-y-8">
+            <div className="lg:col-span-7 space-y-8">
               {/* Live Gatehouse Entry Lanes Status */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-mono uppercase tracking-wider text-amber-300 font-semibold flex items-center gap-1.5">
                     <Radio className="w-3.5 h-3.5" />
-                    <span>Live Entry Gate Lanes & LPR Status</span>
+                    <span>Live Gatehouse Entry Lanes & Optical LPR</span>
                   </span>
                   <span className="text-[11px] font-mono text-stone-400">
-                    Optical LPR · 99.8% Uptime
+                    Encrypted RFID · 99.8% Uptime
                   </span>
                 </div>
 
@@ -214,8 +228,8 @@ export default function SafetyLocationBoard({
               </div>
 
               {/* Streamlined Community Security Protocol Switcher */}
-              <div className="p-6 sm:p-8 rounded-3xl bg-white/6 border border-white/15 space-y-6 flex-1 flex flex-col justify-between">
-                <div className="space-y-5">
+              <div className="p-6 sm:p-8 rounded-3xl bg-white/6 border border-white/15 space-y-6">
+                <div className="space-y-4">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
                     <div>
                       <span className="text-[11px] font-mono uppercase tracking-wider text-amber-300 block">
@@ -265,136 +279,166 @@ export default function SafetyLocationBoard({
                   </ul>
                 </div>
 
-                <div className="pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-2 text-xs font-mono text-stone-400">
-                  <span>Enforced by 24/7 Gatehouse & Courtesy Patrol</span>
-                  <span className="text-emerald-300">✓ Active Covenant</span>
+                <div className="pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-3">
+                  <div className="text-xs font-mono text-stone-400">
+                    Enforced 24/7 by Staffed Gatehouse & Courtesy Patrol
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => onOpenPortalModal("login")}
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-300 hover:underline cursor-pointer"
+                  >
+                    <Lock className="w-3.5 h-3.5" />
+                    <span>Open Resident Access Portal →</span>
+                  </button>
                 </div>
               </div>
             </div>
 
-            {/* Right 5 Columns: Interactive Digital Visitor QR e-Pass Simulator */}
-            <div className="lg:col-span-5">
-              <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-b from-white/12 to-white/5 border border-white/20 shadow-2xl h-full flex flex-col justify-between space-y-6 backdrop-blur-md">
-                <div className="space-y-5">
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-amber-300 font-semibold">
-                      <Sparkles className="w-3.5 h-3.5" />
-                      <span>Interactive Visitor e-Pass Preview</span>
+            {/* Right 5 Columns: Realistic 3D Titanium Smartphone Device Mockup */}
+            <div className="lg:col-span-5 flex justify-center">
+              <div className="w-full max-w-[340px] sm:max-w-[360px] relative">
+                {/* Ambient Soft Glow Behind Phone */}
+                <div className="absolute -inset-4 bg-emerald-500/20 rounded-[60px] blur-2xl pointer-events-none" />
+
+                {/* Titanium Phone Chassis */}
+                <div className="relative rounded-[50px] border-[9px] border-stone-800 bg-stone-950 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)] p-3 ring-1 ring-white/20 overflow-hidden text-stone-900">
+                  {/* Phone Screen Container */}
+                  <div className="rounded-[40px] bg-stone-900 overflow-hidden text-white flex flex-col justify-between min-h-[580px] p-4 relative">
+                    {/* Dynamic Island / Notch */}
+                    <div className="w-24 h-5 bg-black rounded-full mx-auto flex items-center justify-end px-2 gap-1.5 mb-2 shadow-inner">
+                      <span className="w-2 h-2 rounded-full bg-stone-900" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500/80 animate-pulse" />
                     </div>
-                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
-                      Instant QR Fast-Lane
-                    </span>
-                  </div>
 
-                  {/* Pass Type Selector */}
-                  <div className="grid grid-cols-3 gap-1.5 p-1 rounded-xl bg-black/45 border border-white/15">
-                    {[
-                      { id: "guest", label: "Guest / Family" },
-                      { id: "delivery", label: "Courier / Delivery" },
-                      { id: "contractor", label: "Service Vendor" },
-                    ].map((t) => {
-                      const active = passType === t.id;
-                      return (
-                        <button
-                          key={t.id}
-                          type="button"
-                          onClick={() => {
-                            setPassType(t.id as "guest" | "delivery" | "contractor");
-                            setGuestNameInput(
-                              t.id === "guest"
-                                ? "Alexander & Clara Sterling"
-                                : t.id === "delivery"
-                                ? "Priority Parcel / Floral Courier"
-                                : "Barton Creek Landscape & Masonry"
-                            );
-                          }}
-                          className={`py-2 px-2 rounded-lg text-xs font-semibold transition-all cursor-pointer text-center ${
-                            active
-                              ? "bg-white text-stone-950 shadow-sm"
-                              : "text-stone-300 hover:text-white"
-                          }`}
-                        >
-                          {t.label}
-                        </button>
-                      );
-                    })}
-                  </div>
-
-                  {/* Live Interactive Visitor Name Input */}
-                  <div>
-                    <label className="block text-[10px] font-mono uppercase tracking-wider text-stone-300 mb-1.5">
-                      Customize Sample Visitor / Vendor Name:
-                    </label>
-                    <input
-                      type="text"
-                      value={guestNameInput}
-                      onChange={(e) => setGuestNameInput(e.target.value)}
-                      placeholder="Enter visitor or contractor name..."
-                      className="w-full px-3.5 py-2 rounded-xl bg-black/40 border border-white/20 text-xs text-white focus:outline-none focus:border-amber-300"
-                    />
-                  </div>
-
-                  {/* Simulated Digital Gatehouse QR Pass Card */}
-                  <div className="p-5 rounded-2xl bg-white text-stone-900 shadow-xl space-y-4 relative overflow-hidden">
-                    <div className="flex items-start justify-between gap-3 border-b border-stone-200 pb-3.5">
-                      <div>
-                        <span
-                          className="px-2 py-0.5 rounded text-[10px] font-mono font-bold text-white inline-block"
-                          style={{ backgroundColor: tenant.theme.accentPrimary }}
-                        >
-                          {passTypeConfig.badge}
-                        </span>
-                        <h4 className="font-display text-lg font-bold text-stone-900 mt-1 leading-tight">
-                          {guestNameInput || passTypeConfig.defaultGuest}
-                        </h4>
-                        <p className="text-[11px] font-mono text-stone-500">
-                          Host: Residence #408 · {tenant.shortName}
-                        </p>
-                      </div>
-
-                      <div className="p-2 rounded-xl border border-stone-200 bg-stone-50 shrink-0 flex flex-col items-center">
-                        <QrCode className="w-12 h-12 text-stone-900" />
-                        <span className="text-[9px] font-mono font-bold text-stone-600 mt-0.5">
-                          {passTypeConfig.code}
-                        </span>
+                    {/* Status Bar */}
+                    <div className="flex items-center justify-between text-[11px] font-mono px-2 text-stone-300 pb-2 border-b border-white/10">
+                      <span className="font-bold">9:41</span>
+                      <div className="flex items-center gap-1.5">
+                        <Wifi className="w-3 h-3" />
+                        <span className="text-[10px] font-bold">5G</span>
+                        <div className="w-4 h-2 border border-current rounded-xs p-0.5 flex items-center">
+                          <div className="w-full h-full bg-emerald-400" />
+                        </div>
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
-                      <div className="p-2.5 rounded-lg bg-stone-100">
-                        <span className="text-[10px] font-mono uppercase text-stone-500 block">
-                          AUTHORIZED GATE
-                        </span>
-                        <span className="font-semibold text-stone-900 text-[11px]">
-                          {passTypeConfig.gate}
+                    {/* In-App Header */}
+                    <div className="space-y-3 pt-2">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <div
+                            className="w-7 h-7 rounded-lg flex items-center justify-center font-bold text-xs"
+                            style={{ backgroundColor: tenant.theme.accentPrimary }}
+                          >
+                            VG
+                          </div>
+                          <div>
+                            <span className="text-xs font-bold block leading-none">
+                              {tenant.shortName} Access
+                            </span>
+                            <span className="text-[9px] font-mono text-emerald-400">
+                              ● Gatehouse Connected
+                            </span>
+                          </div>
+                        </div>
+                        <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-white/10 text-stone-300">
+                          Res #408
                         </span>
                       </div>
-                      <div className="p-2.5 rounded-lg bg-stone-100">
-                        <span className="text-[10px] font-mono uppercase text-stone-500 block">
-                          ACCESS WINDOW
-                        </span>
-                        <span className="font-semibold text-stone-900 text-[11px]">
-                          {passTypeConfig.window}
-                        </span>
+
+                      {/* In-App Pass Type Selector */}
+                      <div className="grid grid-cols-3 gap-1 p-1 rounded-xl bg-black/60 border border-white/10 text-[10px] font-semibold">
+                        {[
+                          { id: "guest", label: "Guest" },
+                          { id: "delivery", label: "Delivery" },
+                          { id: "contractor", label: "Vendor" },
+                        ].map((t) => {
+                          const active = passType === t.id;
+                          return (
+                            <button
+                              key={t.id}
+                              type="button"
+                              onClick={() => {
+                                setPassType(t.id as "guest" | "delivery" | "contractor");
+                                setGuestNameInput(
+                                  t.id === "guest"
+                                    ? "Alexander & Clara Sterling"
+                                    : t.id === "delivery"
+                                    ? "Priority Parcel / Floral Courier"
+                                    : "Barton Creek Landscape & Masonry"
+                                );
+                              }}
+                              className={`py-1.5 rounded-lg transition-all cursor-pointer text-center ${
+                                active
+                                  ? "bg-white text-stone-950 font-bold shadow-xs"
+                                  : "text-stone-400 hover:text-white"
+                              }`}
+                            >
+                              {t.label}
+                            </button>
+                          );
+                        })}
+                      </div>
+
+                      {/* Digital Boarding Pass Ticket Inside Phone */}
+                      <div className="p-4 rounded-2xl bg-white text-stone-900 shadow-xl space-y-3 relative overflow-hidden">
+                        <div className="flex items-start justify-between gap-2 border-b border-stone-200 pb-2.5">
+                          <div>
+                            <span className="text-[9px] font-mono font-bold tracking-wider uppercase text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded">
+                              {passTypeConfig.badge}
+                            </span>
+                            <h5 className="font-display text-base font-bold mt-1 text-stone-950 leading-tight">
+                              {guestNameInput || passTypeConfig.defaultGuest}
+                            </h5>
+                            <p className="text-[10px] font-mono text-stone-500">
+                              Pass Code: {passTypeConfig.code}
+                            </p>
+                          </div>
+
+                          <div className="w-16 h-16 p-1.5 rounded-xl border border-stone-200 bg-stone-50 shrink-0 flex items-center justify-center shadow-xs">
+                            <QrCode className="w-full h-full text-stone-900" />
+                          </div>
+                        </div>
+
+                        <div className="space-y-1.5 text-[11px] font-mono">
+                          <div className="flex justify-between text-stone-600">
+                            <span>Gate:</span>
+                            <span className="font-bold text-stone-900">{passTypeConfig.gate.split("(")[0]}</span>
+                          </div>
+                          <div className="flex justify-between text-stone-600">
+                            <span>Window:</span>
+                            <span className="font-bold text-stone-900">{passTypeConfig.window}</span>
+                          </div>
+                        </div>
+
+                        <div className="pt-2 border-t border-stone-200 flex items-center justify-between text-[10px] font-mono text-emerald-800">
+                          <span>✓ Fast-Lane Optical LPR</span>
+                          <span className="font-bold">ACTIVE</span>
+                        </div>
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between text-[11px] font-mono text-emerald-800 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-200">
-                      <span>✓ {passTypeConfig.vehicleNote}</span>
-                      <span className="font-bold">ACTIVE</span>
+                    {/* Phone App Actions */}
+                    <div className="space-y-2 pt-3">
+                      <button
+                        type="button"
+                        onClick={() => onOpenPortalModal("login")}
+                        className="w-full py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-stone-950 text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-md"
+                      >
+                        <Share2 className="w-3.5 h-3.5" />
+                        <span>Send QR Pass Link to Guest</span>
+                      </button>
+
+                      <p className="text-[10px] font-mono text-center text-stone-400">
+                        Compatible with Apple Wallet & Google Pay
+                      </p>
                     </div>
+
+                    {/* Phone Home Bar */}
+                    <div className="w-32 h-1 bg-white/40 rounded-full mx-auto mt-2" />
                   </div>
                 </div>
-
-                {/* Portal CTA */}
-                <button
-                  type="button"
-                  onClick={() => onOpenPortalModal("login")}
-                  className="w-full py-3 px-5 rounded-xl text-xs sm:text-sm font-semibold bg-amber-400 hover:bg-amber-300 text-stone-950 shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer"
-                >
-                  <Lock className="w-4 h-4" />
-                  <span>Issue Real Visitor e-Pass in Resident Portal →</span>
-                </button>
               </div>
             </div>
           </div>
