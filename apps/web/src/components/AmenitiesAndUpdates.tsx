@@ -19,6 +19,7 @@ import {
   Search,
   Maximize2,
   ShieldAlert,
+  AlertCircle,
 } from "lucide-react";
 import {
   HoaTenantConfig,
@@ -86,6 +87,13 @@ export default function AmenitiesAndUpdates({
       ann.referenceCode.toLowerCase().includes(announcementSearch.toLowerCase());
     return matchesCategory && matchesSearch;
   });
+
+  const featuredAnnouncement =
+    filteredAnnouncements.find((a) => a.priority === "Important Advisory") ||
+    filteredAnnouncements[0];
+  const feedAnnouncements = filteredAnnouncements.filter(
+    (a) => a.id !== featuredAnnouncement?.id
+  );
 
   const eventCategories = [
     "All",
@@ -330,7 +338,7 @@ export default function AmenitiesAndUpdates({
         </div>
       </section>
 
-      {/* SECTION 6: Latest News and Announcements */}
+      {/* SECTION 6: Latest News and Announcements (Editorial Split Layout) */}
       <section
         id="announcements"
         className="py-20 lg:py-28 border-b"
@@ -339,14 +347,17 @@ export default function AmenitiesAndUpdates({
           borderColor: tenant.theme.borderSubtle,
         }}
       >
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-8 space-y-10">
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-8 space-y-12">
+          {/* Section Header with Integrated Search and Category Filter */}
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 border-b pb-8"
+            style={{ borderColor: tenant.theme.borderSubtle }}
+          >
             <div className="space-y-3 max-w-2xl">
               <p
                 className="text-xs font-mono uppercase tracking-[0.15em]"
                 style={{ color: tenant.theme.accentSecondary }}
               >
-                CHAPTER III · OFFICIAL CIVIC DISPATCH & ADVISORIES
+                OFFICIAL COMMUNITY DISPATCH & BULLETINS
               </p>
               <h2
                 className="font-display text-3xl sm:text-4xl lg:text-[44px] font-semibold tracking-tight leading-[1.12]"
@@ -375,7 +386,7 @@ export default function AmenitiesAndUpdates({
                   onChange={(e) => setAnnouncementSearch(e.target.value)}
                   placeholder="Search notices or codes..."
                   aria-label="Search announcements"
-                  className="pl-9 pr-4 py-2 rounded-md border text-xs w-full sm:w-56 focus:outline-none"
+                  className="pl-9 pr-4 py-2.5 rounded-xl border text-xs w-full sm:w-64 focus:outline-none transition-shadow"
                   style={{
                     backgroundColor: tenant.theme.bgSecondary,
                     borderColor: tenant.theme.borderSubtle,
@@ -386,7 +397,7 @@ export default function AmenitiesAndUpdates({
             </div>
           </div>
 
-          {/* Announcement Category Filter Pills */}
+          {/* Category Filter Pills */}
           <div className="flex flex-wrap gap-2">
             {announcementCategories.map((cat) => {
               const active = announcementCategory === cat;
@@ -395,8 +406,8 @@ export default function AmenitiesAndUpdates({
                   key={cat}
                   type="button"
                   onClick={() => setAnnouncementCategory(cat)}
-                  className={`px-3.5 py-1.5 rounded-md text-xs font-semibold border transition-all cursor-pointer ${
-                    active ? "text-white" : "hover:bg-black/5"
+                  className={`px-4 py-2 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
+                    active ? "shadow-xs text-white" : "hover:bg-black/5"
                   }`}
                   style={{
                     backgroundColor: active
@@ -414,98 +425,222 @@ export default function AmenitiesAndUpdates({
             })}
           </div>
 
-          {/* Announcements Ledger Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {filteredAnnouncements.map((ann) => {
-              const isHighPriority = ann.priority === "Important Advisory";
-              return (
-                <div
-                  key={ann.id}
-                  className="p-6 sm:p-7 rounded-xl border flex flex-col justify-between transition-all hover:shadow-md"
-                  style={{
-                    backgroundColor: tenant.theme.bgSecondary,
-                    borderColor: isHighPriority
-                      ? tenant.theme.accentSecondary
-                      : tenant.theme.borderSubtle,
-                  }}
-                >
-                  <div className="space-y-4">
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <div className="flex items-center gap-2">
-                        <span
-                          className="px-2.5 py-0.5 rounded text-[11px] font-mono font-semibold border"
-                          style={{
-                            backgroundColor: tenant.theme.bgPrimary,
-                            borderColor: tenant.theme.borderSubtle,
-                            color: tenant.theme.accentPrimary,
-                          }}
-                        >
-                          {ann.referenceCode}
+          {/* Editorial Visual Magazine Newsroom: Cover Story (Left 6 Cols) + Magazine Articles (Right 6 Cols) */}
+          {filteredAnnouncements.length === 0 ? (
+            <div
+              className="p-12 text-center rounded-2xl border"
+              style={{
+                backgroundColor: tenant.theme.bgSecondary,
+                borderColor: tenant.theme.borderSubtle,
+                color: tenant.theme.textSecondary,
+              }}
+            >
+              <Bell className="w-8 h-8 mx-auto mb-3 opacity-40" />
+              <p className="text-base font-semibold">No bulletins match your search criteria</p>
+              <button
+                type="button"
+                onClick={() => {
+                  setAnnouncementSearch("");
+                  setAnnouncementCategory("All");
+                }}
+                className="mt-3 text-xs font-semibold underline cursor-pointer"
+                style={{ color: tenant.theme.accentPrimary }}
+              >
+                Reset filters
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+              {/* Left Column (6 Cols): Visual Magazine Cover Feature */}
+              {featuredAnnouncement && (
+                <div className="lg:col-span-6 h-full">
+                  <div
+                    onClick={() => setSelectedAnnouncement(featuredAnnouncement)}
+                    className="relative rounded-3xl overflow-hidden border shadow-2xl flex flex-col justify-end p-7 sm:p-10 min-h-[460px] sm:min-h-[520px] h-full group cursor-pointer transition-all duration-500 hover:shadow-3xl"
+                    style={{
+                      borderColor: featuredAnnouncement.priority === "Important Advisory"
+                        ? `${tenant.theme.accentSecondary}80`
+                        : tenant.theme.borderSubtle,
+                    }}
+                  >
+                    {/* Background High-Res Photographic Cover with Subtle Ken-Burns Zoom */}
+                    <div className="absolute inset-0 z-0 bg-stone-900 overflow-hidden">
+                      {featuredAnnouncement.imageUrl ? (
+                        <img
+                          src={featuredAnnouncement.imageUrl}
+                          alt={featuredAnnouncement.title}
+                          className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-108"
+                        />
+                      ) : (
+                        <div
+                          className="w-full h-full"
+                          style={{ backgroundColor: tenant.theme.accentPrimary }}
+                        />
+                      )}
+                      {/* Cinematic Multi-Layer Gradient Overlays for Readability */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/55 to-black/30" />
+                    </div>
+
+                    {/* Content on top of Cover */}
+                    <div className="relative z-10 space-y-4 text-white">
+                      {/* Priority Badges & Reference Code */}
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="px-3 py-1 rounded-full text-[11px] font-mono font-bold tracking-wide flex items-center gap-1.5 bg-amber-500 text-stone-950 shadow-md">
+                          <AlertCircle className="w-3.5 h-3.5" />
+                          <span>FEATURED COVER STORY</span>
                         </span>
-                        <span
-                          className="px-2.5 py-0.5 rounded text-[11px] font-medium"
-                          style={{
-                            backgroundColor: isHighPriority
-                              ? `${tenant.theme.accentSecondary}25`
-                              : `${tenant.theme.accentPrimary}15`,
-                            color: isHighPriority
-                              ? tenant.theme.accentSecondary
-                              : tenant.theme.accentPrimary,
-                          }}
-                        >
-                          {ann.category}
+                        <span className="px-2.5 py-1 rounded-md text-[11px] font-mono font-semibold bg-white/20 backdrop-blur-md border border-white/20">
+                          {featuredAnnouncement.referenceCode}
+                        </span>
+                        {featuredAnnouncement.readTime && (
+                          <span className="text-xs font-mono text-stone-300">
+                            · {featuredAnnouncement.readTime}
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Headline */}
+                      <h3 className="font-display text-2xl sm:text-3xl lg:text-[32px] font-bold leading-tight group-hover:underline decoration-1 underline-offset-4">
+                        {featuredAnnouncement.title}
+                      </h3>
+
+                      {/* Excerpt */}
+                      <p className="text-sm text-stone-200 leading-relaxed line-clamp-3">
+                        {featuredAnnouncement.summary}
+                      </p>
+
+                      {/* Author Byline & Action */}
+                      <div className="pt-4 border-t border-white/20 flex flex-wrap items-center justify-between gap-4">
+                        <div className="flex items-center gap-3">
+                          {featuredAnnouncement.author?.avatarUrl ? (
+                            <img
+                              src={featuredAnnouncement.author.avatarUrl}
+                              alt={featuredAnnouncement.author.name}
+                              className="w-10 h-10 rounded-full object-cover border-2 border-white/60 shadow-sm"
+                            />
+                          ) : (
+                            <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center font-bold text-xs">
+                              {featuredAnnouncement.author?.name?.[0] || "H"}
+                            </div>
+                          )}
+                          <div>
+                            <span className="font-semibold text-xs sm:text-sm block leading-none">
+                              {featuredAnnouncement.author?.name || featuredAnnouncement.contactDepartment}
+                            </span>
+                            <span className="text-[11px] text-stone-300 mt-1 block">
+                              {featuredAnnouncement.author?.role || featuredAnnouncement.category} · {featuredAnnouncement.date}
+                            </span>
+                          </div>
+                        </div>
+
+                        <span className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-white text-stone-950 shadow-md transition-all group-hover:translate-x-1">
+                          <span>Read Article</span>
+                          <ArrowUpRight className="w-3.5 h-3.5" />
                         </span>
                       </div>
-                      <span
-                        className="text-xs font-mono"
-                        style={{ color: tenant.theme.textSecondary }}
-                      >
-                        Posted: {ann.date}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Right Column (6 Cols): Magazine Feed with Visual Cards */}
+              <div className="lg:col-span-6 space-y-4 flex flex-col justify-between">
+                {(feedAnnouncements.length > 0 ? feedAnnouncements : filteredAnnouncements).map((ann) => (
+                  <article
+                    key={ann.id}
+                    onClick={() => setSelectedAnnouncement(ann)}
+                    className="p-5 sm:p-6 rounded-3xl border transition-all duration-300 hover:-translate-y-1 hover:shadow-xl cursor-pointer group flex flex-col sm:flex-row items-start sm:items-center gap-5"
+                    style={{
+                      backgroundColor: tenant.theme.bgSecondary,
+                      borderColor: tenant.theme.borderSubtle,
+                    }}
+                  >
+                    {/* Article Photographic Thumbnail */}
+                    <div className="w-full sm:w-40 sm:h-32 aspect-[16/10] sm:aspect-auto rounded-2xl overflow-hidden shrink-0 relative bg-stone-900 border"
+                      style={{ borderColor: tenant.theme.borderSubtle }}
+                    >
+                      {ann.imageUrl ? (
+                        <img
+                          src={ann.imageUrl}
+                          alt={ann.title}
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-108"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-xs text-stone-400">
+                          {ann.category}
+                        </div>
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+                      <span className="absolute bottom-2 left-2 text-[10px] font-mono uppercase font-semibold px-2 py-0.5 rounded bg-black/70 text-white backdrop-blur-xs">
+                        {ann.referenceCode}
                       </span>
                     </div>
 
-                    <h3
-                      className="font-display text-2xl font-semibold leading-snug"
-                      style={{ color: tenant.theme.textPrimary }}
-                    >
-                      {ann.title}
-                    </h3>
+                    {/* Article Body */}
+                    <div className="space-y-2 flex-1">
+                      <div className="flex flex-wrap items-center gap-2 text-xs">
+                        <span
+                          className="font-mono text-[11px] font-semibold"
+                          style={{ color: tenant.theme.accentSecondary }}
+                        >
+                          {ann.category}
+                        </span>
+                        {ann.readTime && (
+                          <span className="font-mono text-[11px]" style={{ color: tenant.theme.textSecondary }}>
+                            · {ann.readTime}
+                          </span>
+                        )}
+                      </div>
 
-                    <p
-                      className="text-sm leading-relaxed"
-                      style={{ color: tenant.theme.textSecondary }}
-                    >
-                      {ann.summary}
-                    </p>
-                  </div>
+                      <h4
+                        className="font-display text-base sm:text-lg font-bold leading-snug group-hover:underline decoration-1 underline-offset-2"
+                        style={{ color: tenant.theme.textPrimary }}
+                      >
+                        {ann.title}
+                      </h4>
 
-                  <div
-                    className="mt-6 pt-4 border-t flex flex-wrap items-center justify-between gap-3 text-xs"
-                    style={{ borderColor: tenant.theme.borderSubtle }}
-                  >
-                    <div className="font-mono" style={{ color: tenant.theme.textSecondary }}>
-                      <span className="font-semibold" style={{ color: tenant.theme.textPrimary }}>
-                        Effective:
-                      </span>{" "}
-                      {ann.effectivePeriod}
+                      <p
+                        className="text-xs leading-relaxed line-clamp-2"
+                        style={{ color: tenant.theme.textSecondary }}
+                      >
+                        {ann.summary}
+                      </p>
+
+                      {/* Author & Date Footer */}
+                      <div className="pt-2 flex items-center justify-between text-xs font-mono" style={{ color: tenant.theme.textSecondary }}>
+                        <div className="flex items-center gap-2">
+                          {ann.author?.avatarUrl && (
+                            <img
+                              src={ann.author.avatarUrl}
+                              alt={ann.author.name}
+                              className="w-5 h-5 rounded-full object-cover border"
+                            />
+                          )}
+                          <span className="text-[11px] font-semibold truncate" style={{ color: tenant.theme.textPrimary }}>
+                            {ann.author?.name || ann.contactDepartment.split("·")[0]}
+                          </span>
+                        </div>
+                        <span className="text-[11px]">{ann.date.split(",")[0]}</span>
+                      </div>
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => setSelectedAnnouncement(ann)}
-                      className="inline-flex items-center gap-1.5 font-semibold px-3 py-1.5 rounded border transition-colors hover:bg-black/5 cursor-pointer"
-                      style={{
-                        borderColor: tenant.theme.accentPrimary,
-                        color: tenant.theme.accentPrimary,
-                      }}
-                    >
-                      <FileText className="w-3.5 h-3.5" />
-                      <span>Read Full Bulletin</span>
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+
+                    <div className="hidden sm:flex shrink-0 self-center">
+                      <div
+                        className="w-8 h-8 rounded-full border flex items-center justify-center transition-all group-hover:translate-x-1"
+                        style={{
+                          borderColor: tenant.theme.borderSubtle,
+                          backgroundColor: tenant.theme.bgPrimary,
+                          color: tenant.theme.textPrimary,
+                        }}
+                      >
+                        <ChevronRight className="w-4 h-4" />
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
@@ -916,94 +1051,165 @@ export default function AmenitiesAndUpdates({
       {/* MODAL: Full Announcement Bulletin Reader */}
       {selectedAnnouncement && (
         <div
-          className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4 animate-fade-up"
           onClick={() => setSelectedAnnouncement(null)}
         >
           <div
-            className="max-w-2xl w-full rounded-xl overflow-hidden border shadow-2xl p-6 sm:p-8 space-y-5"
+            className="max-w-2xl w-full rounded-2xl overflow-hidden border shadow-2xl space-y-0"
             style={{
               backgroundColor: tenant.theme.bgPrimary,
               borderColor: tenant.theme.borderSubtle,
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-start justify-between gap-4 border-b pb-4"
-              style={{ borderColor: tenant.theme.borderSubtle }}
-            >
-              <div>
-                <div className="flex items-center gap-2 text-xs font-mono">
-                  <span
-                    className="px-2 py-0.5 rounded font-semibold text-white"
-                    style={{ backgroundColor: tenant.theme.accentPrimary }}
-                  >
-                    {selectedAnnouncement.referenceCode}
-                  </span>
-                  <span style={{ color: tenant.theme.accentSecondary }}>
-                    {selectedAnnouncement.category}
-                  </span>
+            {/* Modal Cover Image */}
+            {selectedAnnouncement.imageUrl && (
+              <div className="relative h-48 sm:h-56 bg-stone-900 w-full overflow-hidden">
+                <img
+                  src={selectedAnnouncement.imageUrl}
+                  alt={selectedAnnouncement.title}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-black/30" />
+                <button
+                  type="button"
+                  onClick={() => setSelectedAnnouncement(null)}
+                  className="absolute top-4 right-4 p-2 rounded-full bg-black/60 text-white hover:bg-black/80 cursor-pointer shadow-md"
+                  aria-label="Close modal"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+                <div className="absolute bottom-4 left-6 right-6 text-white space-y-1">
+                  <div className="flex items-center gap-2 text-[11px] font-mono">
+                    <span className="px-2 py-0.5 rounded font-bold bg-amber-500 text-stone-950">
+                      {selectedAnnouncement.referenceCode}
+                    </span>
+                    <span className="text-stone-300">
+                      {selectedAnnouncement.category}
+                    </span>
+                  </div>
+                  <h3 className="font-display text-xl sm:text-2xl font-bold leading-tight">
+                    {selectedAnnouncement.title}
+                  </h3>
                 </div>
-                <h3
-                  className="font-display text-2xl sm:text-3xl font-semibold mt-2"
-                  style={{ color: tenant.theme.textPrimary }}
+              </div>
+            )}
+
+            <div className="p-6 sm:p-8 space-y-5 max-h-[60vh] overflow-y-auto">
+              {!selectedAnnouncement.imageUrl && (
+                <div
+                  className="flex items-start justify-between gap-4 border-b pb-4"
+                  style={{ borderColor: tenant.theme.borderSubtle }}
                 >
-                  {selectedAnnouncement.title}
-                </h3>
-              </div>
-              <button
-                type="button"
-                onClick={() => setSelectedAnnouncement(null)}
-                className="p-2 rounded-md border hover:bg-black/5 cursor-pointer"
-                style={{ borderColor: tenant.theme.borderSubtle }}
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
+                  <div>
+                    <div className="flex items-center gap-2 text-xs font-mono">
+                      <span
+                        className="px-2 py-0.5 rounded font-semibold text-white"
+                        style={{ backgroundColor: tenant.theme.accentPrimary }}
+                      >
+                        {selectedAnnouncement.referenceCode}
+                      </span>
+                      <span style={{ color: tenant.theme.accentSecondary }}>
+                        {selectedAnnouncement.category}
+                      </span>
+                    </div>
+                    <h3
+                      className="font-display text-2xl font-semibold mt-2"
+                      style={{ color: tenant.theme.textPrimary }}
+                    >
+                      {selectedAnnouncement.title}
+                    </h3>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedAnnouncement(null)}
+                    className="p-2 rounded-md border hover:bg-black/5 cursor-pointer"
+                    style={{ borderColor: tenant.theme.borderSubtle }}
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
 
-            <div
-              className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3.5 rounded-lg border text-xs font-mono"
-              style={{
-                backgroundColor: tenant.theme.bgSecondary,
-                borderColor: tenant.theme.borderSubtle,
-              }}
-            >
-              <div>
-                <span className="opacity-70 block">EFFECTIVE WINDOW</span>
-                <span className="font-semibold">{selectedAnnouncement.effectivePeriod}</span>
-              </div>
-              <div>
-                <span className="opacity-70 block">AFFECTED SECTORS</span>
-                <span className="font-semibold">{selectedAnnouncement.affectedAreas}</span>
-              </div>
-            </div>
-
-            <div className="space-y-3">
-              {selectedAnnouncement.fullDetails.map((para, idx) => (
-                <p
-                  key={idx}
-                  className="text-sm leading-relaxed"
-                  style={{ color: tenant.theme.textPrimary }}
+              {/* Author Byline */}
+              {selectedAnnouncement.author && (
+                <div
+                  className="p-3.5 rounded-xl border flex items-center justify-between gap-3 text-xs"
+                  style={{
+                    backgroundColor: tenant.theme.bgSecondary,
+                    borderColor: tenant.theme.borderSubtle,
+                  }}
                 >
-                  {para}
-                </p>
-              ))}
-            </div>
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={selectedAnnouncement.author.avatarUrl}
+                      alt={selectedAnnouncement.author.name}
+                      className="w-10 h-10 rounded-full object-cover border"
+                      style={{ borderColor: tenant.theme.borderSubtle }}
+                    />
+                    <div>
+                      <span className="font-bold block" style={{ color: tenant.theme.textPrimary }}>
+                        {selectedAnnouncement.author.name}
+                      </span>
+                      <span className="text-[11px]" style={{ color: tenant.theme.textSecondary }}>
+                        {selectedAnnouncement.author.role} · Published {selectedAnnouncement.date}
+                      </span>
+                    </div>
+                  </div>
+                  {selectedAnnouncement.readTime && (
+                    <span className="font-mono text-[11px]" style={{ color: tenant.theme.accentSecondary }}>
+                      {selectedAnnouncement.readTime}
+                    </span>
+                  )}
+                </div>
+              )}
 
-            <div
-              className="pt-4 border-t flex flex-wrap items-center justify-between gap-3 text-xs"
-              style={{
-                borderColor: tenant.theme.borderSubtle,
-                color: tenant.theme.textSecondary,
-              }}
-            >
-              <span>Issuing Office: {selectedAnnouncement.contactDepartment}</span>
-              <button
-                type="button"
-                onClick={() => setSelectedAnnouncement(null)}
-                className="px-4 py-2 rounded-md font-semibold text-white cursor-pointer"
-                style={{ backgroundColor: tenant.theme.accentPrimary }}
+              <div
+                className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3.5 rounded-xl border text-xs font-mono"
+                style={{
+                  backgroundColor: tenant.theme.bgSecondary,
+                  borderColor: tenant.theme.borderSubtle,
+                }}
               >
-                Close Notice
-              </button>
+                <div>
+                  <span className="opacity-70 block">EFFECTIVE WINDOW</span>
+                  <span className="font-semibold">{selectedAnnouncement.effectivePeriod}</span>
+                </div>
+                <div>
+                  <span className="opacity-70 block">AFFECTED SECTORS</span>
+                  <span className="font-semibold">{selectedAnnouncement.affectedAreas}</span>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                {selectedAnnouncement.fullDetails.map((para, idx) => (
+                  <p
+                    key={idx}
+                    className="text-sm leading-relaxed"
+                    style={{ color: tenant.theme.textPrimary }}
+                  >
+                    {para}
+                  </p>
+                ))}
+              </div>
+
+              <div
+                className="pt-4 border-t flex flex-wrap items-center justify-between gap-3 text-xs"
+                style={{
+                  borderColor: tenant.theme.borderSubtle,
+                  color: tenant.theme.textSecondary,
+                }}
+              >
+                <span>Issuing Department: {selectedAnnouncement.contactDepartment}</span>
+                <button
+                  type="button"
+                  onClick={() => setSelectedAnnouncement(null)}
+                  className="px-4 py-2 rounded-lg font-semibold text-white cursor-pointer shadow-xs"
+                  style={{ backgroundColor: tenant.theme.accentPrimary }}
+                >
+                  Close Dispatch
+                </button>
+              </div>
             </div>
           </div>
         </div>

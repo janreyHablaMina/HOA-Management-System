@@ -330,6 +330,15 @@ export const HOA_TENANTS: HoaTenantConfig[] = [
         priority: "Scheduled Notice",
         date: "October 18, 2026",
         effectivePeriod: "Oct 26 – Nov 6, 2026 (8:30 AM – 4:00 PM)",
+        readTime: "3 min read",
+        imageUrl:
+          "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=1200&q=80",
+        author: {
+          name: "Robert Vance",
+          role: "Director of Facilities & Grounds",
+          avatarUrl:
+            "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80",
+        },
         summary:
           "Certified arborists and masonry crews will conduct annual oak wilt preventative pruning and low-wall repointing along Veridian Parkway and Overlook Ridge.",
         fullDetails: [
@@ -348,6 +357,15 @@ export const HOA_TENANTS: HoaTenantConfig[] = [
         priority: "Important Advisory",
         date: "October 15, 2026",
         effectivePeriod: "Meeting Date: Thursday, Nov 19, 2026 at 6:30 PM",
+        readTime: "4 min read",
+        imageUrl:
+          "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1200&q=80",
+        author: {
+          name: "Eleanor Caldwell",
+          role: "HOA Board President",
+          avatarUrl:
+            "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80",
+        },
         summary:
           "The Board of Directors invites all homeowners to review the proposed 2027 Operating & Capital Reserve Budget ahead of the November 19 assembly at The Grand Conservatory.",
         fullDetails: [
@@ -366,6 +384,15 @@ export const HOA_TENANTS: HoaTenantConfig[] = [
         priority: "Community News",
         date: "October 10, 2026",
         effectivePeriod: "Nov 15, 2026 – Jan 15, 2027",
+        readTime: "2 min read",
+        imageUrl:
+          "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80",
+        author: {
+          name: "Julian Mercer",
+          role: "ARC Committee Chair",
+          avatarUrl:
+            "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80",
+        },
         summary:
           "Review the Architectural Review Committee's seasonal lighting dates, warm-white Kelvin recommendations, and Dark-Sky courtesy hours for the upcoming holiday season.",
         fullDetails: [
@@ -384,6 +411,15 @@ export const HOA_TENANTS: HoaTenantConfig[] = [
         priority: "Community News",
         date: "October 04, 2026",
         effectivePeriod: "Active Immediately",
+        readTime: "2 min read",
+        imageUrl:
+          "https://images.unsplash.com/photo-1590674899484-d5640e854abe?auto=format&fit=crop&w=1200&q=80",
+        author: {
+          name: "Marcus Hayes",
+          role: "Head of Gatehouse Operations",
+          avatarUrl:
+            "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
+        },
         summary:
           "Optical recognition speed at resident entry lanes has been improved by 40%. New vehicle decals and mobile QR visitor passes remain fully supported.",
         fullDetails: [

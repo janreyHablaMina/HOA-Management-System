@@ -70,6 +70,13 @@ export interface AnnouncementItem {
   fullDetails: string[];
   affectedAreas: string;
   contactDepartment: string;
+  imageUrl?: string;
+  readTime?: string;
+  author?: {
+    name: string;
+    role: string;
+    avatarUrl: string;
+  };
 }
 
 export interface CommunityEventItem {
