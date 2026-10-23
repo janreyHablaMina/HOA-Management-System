@@ -147,17 +147,23 @@ export default function NavbarAndHero({
     <>
       {/* SECTION 1: Header and Navigation */}
       <header
-        className={`sticky top-0 z-40 w-full transition-all duration-300 border-b ${
-          scrolled ? "shadow-sm backdrop-blur-md" : "backdrop-blur-sm"
+        className={`sticky top-0 z-40 w-full transition-all duration-300 ease-in-out border-b ${
+          scrolled ? "shadow-md backdrop-blur-md" : "shadow-none backdrop-blur-sm"
         }`}
         style={{
           backgroundColor: scrolled
-            ? `${tenant.theme.bgPrimary}F2`
+            ? `${tenant.theme.bgPrimary}F5`
             : `${tenant.theme.bgPrimary}E6`,
-          borderColor: tenant.theme.borderSubtle,
+          borderColor: scrolled
+            ? `${tenant.theme.accentSecondary}35`
+            : tenant.theme.borderSubtle,
         }}
       >
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-8 h-20 flex items-center justify-between gap-4">
+        <div
+          className={`max-w-[1440px] mx-auto px-4 sm:px-8 flex items-center justify-between gap-4 transition-all duration-300 ease-in-out ${
+            scrolled ? "h-16" : "h-20"
+          }`}
+        >
           {/* Subdivision Crest Logo & Name */}
           <a
             href="#"
@@ -165,7 +171,9 @@ export default function NavbarAndHero({
             aria-label={`${tenant.name} Home`}
           >
             <div
-              className="w-11 h-11 rounded-lg flex items-center justify-center border shadow-xs transition-transform duration-300 group-hover:scale-105 shrink-0"
+              className={`rounded-lg flex items-center justify-center border shadow-xs transition-all duration-300 ease-in-out group-hover:scale-105 shrink-0 ${
+                scrolled ? "w-9 h-9" : "w-11 h-11"
+              }`}
               style={{
                 backgroundColor: tenant.theme.accentPrimary,
                 borderColor: tenant.theme.accentSecondary,
@@ -176,7 +184,9 @@ export default function NavbarAndHero({
               <svg
                 viewBox="0 0 36 36"
                 fill="none"
-                className="w-6 h-6"
+                className={`transition-all duration-300 ease-in-out ${
+                  scrolled ? "w-5 h-5" : "w-6 h-6"
+                }`}
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
@@ -198,20 +208,14 @@ export default function NavbarAndHero({
               </svg>
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <span
-                  className="font-display text-lg sm:text-xl font-semibold tracking-tight leading-none"
-                  style={{ color: tenant.theme.textPrimary }}
-                >
-                  {tenant.name}
-                </span>
-              </div>
-              <p
-                className="text-[11px] font-mono uppercase tracking-[0.14em] mt-1"
-                style={{ color: tenant.theme.textSecondary }}
+              <span
+                className={`font-display font-semibold tracking-tight transition-all duration-300 ease-in-out ${
+                  scrolled ? "text-base sm:text-lg" : "text-lg sm:text-xl"
+                }`}
+                style={{ color: tenant.theme.textPrimary }}
               >
-                Est. {tenant.establishedYear} · {tenant.locationCityState}
-              </p>
+                {tenant.name}
+              </span>
             </div>
           </a>
 
@@ -404,35 +408,54 @@ export default function NavbarAndHero({
           </nav>
 
           {/* Action CTAs: Download App + Resident Portal + Mobile Menu Trigger */}
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2 sm:gap-2.5">
             <button
               type="button"
               onClick={() => setDownloadAppModalOpen(true)}
-              className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-md text-xs sm:text-sm font-semibold border transition-all hover:bg-black/5 cursor-pointer shadow-2xs"
+              className={`hidden sm:inline-flex items-center gap-1.5 rounded-md font-semibold border transition-all duration-300 hover:bg-black/5 cursor-pointer shadow-2xs ${
+                scrolled
+                  ? "px-3 py-1.5 text-xs"
+                  : "px-3.5 py-2 text-xs sm:text-sm"
+              }`}
               style={{
                 borderColor: tenant.theme.borderSubtle,
                 color: tenant.theme.textPrimary,
               }}
               title="Download HOA Resident Mobile App"
             >
-              <Smartphone className="w-4 h-4" style={{ color: tenant.theme.accentSecondary }} />
+              <Smartphone
+                className={`transition-all duration-300 ${
+                  scrolled ? "w-3.5 h-3.5" : "w-4 h-4"
+                }`}
+                style={{ color: tenant.theme.accentSecondary }}
+              />
               <span>Download App</span>
             </button>
 
             <button
               type="button"
               onClick={() => onOpenPortalModal("login")}
-              className="inline-flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-md text-xs sm:text-sm font-semibold tracking-wide text-white shadow-xs transition-all duration-200 hover:opacity-95 hover:-translate-y-0.5 cursor-pointer"
+              className={`inline-flex items-center gap-2 rounded-md font-semibold tracking-wide text-white shadow-xs transition-all duration-300 hover:opacity-95 hover:-translate-y-0.5 cursor-pointer ${
+                scrolled
+                  ? "px-3.5 sm:px-4 py-1.5 sm:py-2 text-xs"
+                  : "px-4 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm"
+              }`}
               style={{ backgroundColor: tenant.theme.accentPrimary }}
             >
-              <Lock className="w-3.5 h-3.5 text-amber-300" />
+              <Lock
+                className={`transition-all duration-300 ${
+                  scrolled ? "w-3 h-3" : "w-3.5 h-3.5"
+                } text-amber-300`}
+              />
               <span>Resident Portal</span>
             </button>
 
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2.5 rounded-md border transition-colors"
+              className={`lg:hidden rounded-md border transition-all duration-300 ${
+                scrolled ? "p-2" : "p-2.5"
+              }`}
               style={{
                 borderColor: tenant.theme.borderSubtle,
                 color: tenant.theme.textPrimary,
@@ -860,9 +883,9 @@ export default function NavbarAndHero({
         }}
       >
         <div className="max-w-[1440px] mx-auto px-4 sm:px-8 space-y-16">
-          {/* Editorial Split: Narrative + Interactive Mission/History/Architecture Tabs */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-            {/* Left 7 Columns */}
+          {/* Editorial Split: Story Narrative + High-Impact Architectural Imagery */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            {/* Left 7 Columns: Subdivision Overview & Story */}
             <div className="lg:col-span-7 space-y-6">
               <p
                 className="text-xs font-mono uppercase tracking-[0.15em]"
@@ -889,170 +912,43 @@ export default function NavbarAndHero({
                 {tenant.about.secondaryParagraph}
               </p>
 
-              {/* Interactive Tab Switcher: Mission & Vision | Architectural Pattern Book | History Timeline */}
-              <div className="pt-4">
-                <div
-                  className="inline-flex flex-wrap rounded-lg p-1 border gap-1"
-                  style={{
-                    backgroundColor: tenant.theme.bgSecondary,
-                    borderColor: tenant.theme.borderSubtle,
-                  }}
-                >
-                  {[
-                    { id: "mission", label: "Mission & Vision" },
-                    { id: "history", label: "Subdivision History & Milestones" },
-                    { id: "architecture", label: "Architectural Standards" },
-                  ].map((tab) => {
-                    const active = activeAboutTab === tab.id;
-                    return (
-                      <button
-                        key={tab.id}
-                        type="button"
-                        onClick={() =>
-                          setActiveAboutTab(tab.id as "mission" | "history" | "architecture")
-                        }
-                        className={`px-4 py-2 rounded-md text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
-                          active ? "shadow-xs text-white" : "hover:bg-black/5"
-                        }`}
-                        style={{
-                          backgroundColor: active ? tenant.theme.accentPrimary : "transparent",
-                          color: active ? "#FFFFFF" : tenant.theme.textPrimary,
-                        }}
-                      >
-                        {tab.label}
-                      </button>
-                    );
-                  })}
+              {/* Quick Metrics Bar */}
+              <div
+                className="pt-6 grid grid-cols-1 sm:grid-cols-3 gap-4 border-t"
+                style={{ borderColor: tenant.theme.borderSubtle }}
+              >
+                <div>
+                  <span
+                    className="font-display text-2xl font-bold block"
+                    style={{ color: tenant.theme.accentPrimary }}
+                  >
+                    485+
+                  </span>
+                  <span className="text-xs font-medium" style={{ color: tenant.theme.textSecondary }}>
+                    Resident Families
+                  </span>
                 </div>
-
-                {/* Tab Panel Content */}
-                <div
-                  className="mt-5 p-6 sm:p-8 rounded-xl border"
-                  style={{
-                    backgroundColor: tenant.theme.bgSecondary,
-                    borderColor: tenant.theme.borderSubtle,
-                  }}
-                >
-                  {activeAboutTab === "mission" && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <div className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider"
-                          style={{ color: tenant.theme.accentSecondary }}
-                        >
-                          <Compass className="w-4 h-4" />
-                          <span>Our Community Mission</span>
-                        </div>
-                        <h3
-                          className="font-display text-xl font-semibold"
-                          style={{ color: tenant.theme.textPrimary }}
-                        >
-                          Stewardship & Everyday Excellence
-                        </h3>
-                        <p className="text-sm leading-relaxed" style={{ color: tenant.theme.textSecondary }}>
-                          {tenant.about.mission}
-                        </p>
-                      </div>
-
-                      <div
-                        className="space-y-2 md:border-l md:pl-6"
-                        style={{ borderColor: tenant.theme.borderSubtle }}
-                      >
-                        <div className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider"
-                          style={{ color: tenant.theme.accentSecondary }}
-                        >
-                          <Award className="w-4 h-4" />
-                          <span>Our Long-Range Vision</span>
-                        </div>
-                        <h3
-                          className="font-display text-xl font-semibold"
-                          style={{ color: tenant.theme.textPrimary }}
-                        >
-                          Enduring Generational Value
-                        </h3>
-                        <p className="text-sm leading-relaxed" style={{ color: tenant.theme.textSecondary }}>
-                          {tenant.about.vision}
-                        </p>
-                      </div>
-                    </div>
-                  )}
-
-                  {activeAboutTab === "history" && (
-                    <div className="space-y-4">
-                      <p className="text-xs font-mono uppercase tracking-wider" style={{ color: tenant.theme.accentSecondary }}>
-                        CHRONOLOGICAL CHARTER & DEVELOPMENT MILESTONES
-                      </p>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        {tenant.about.milestones.map((m) => (
-                          <div
-                            key={m.year}
-                            className="p-4 rounded-lg border bg-white/70"
-                            style={{ borderColor: tenant.theme.borderSubtle }}
-                          >
-                            <span
-                              className="inline-block px-2.5 py-0.5 rounded text-xs font-mono font-semibold text-white"
-                              style={{ backgroundColor: tenant.theme.accentPrimary }}
-                            >
-                              {m.year}
-                            </span>
-                            <h4
-                              className="font-semibold text-sm mt-2"
-                              style={{ color: tenant.theme.textPrimary }}
-                            >
-                              {m.title}
-                            </h4>
-                            <p
-                              className="text-xs leading-relaxed mt-1"
-                              style={{ color: tenant.theme.textSecondary }}
-                            >
-                              {m.description}
-                            </p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {activeAboutTab === "architecture" && (
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-mono uppercase tracking-wider" style={{ color: tenant.theme.accentSecondary }}>
-                          ARCHITECTURAL PATTERN BOOK & ECOLOGICAL COVENANTS
-                        </span>
-                        <a
-                          href="#documents"
-                          className="text-xs font-semibold underline"
-                          style={{ color: tenant.theme.accentPrimary }}
-                        >
-                          Download Pattern Book →
-                        </a>
-                      </div>
-                      <p className="text-sm leading-relaxed" style={{ color: tenant.theme.textPrimary }}>
-                        {tenant.about.architecturalNote}
-                      </p>
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
-                        {[
-                          "100% Underground Fiber & Utilities",
-                          "Certified Dark-Sky Street Illumination",
-                          "Minimum 35% Protected Open Space",
-                        ].map((item) => (
-                          <div
-                            key={item}
-                            className="flex items-center gap-2 text-xs font-medium p-2.5 rounded border bg-white/60"
-                            style={{
-                              borderColor: tenant.theme.borderSubtle,
-                              color: tenant.theme.textPrimary,
-                            }}
-                          >
-                            <CheckCircle2
-                              className="w-4 h-4 shrink-0"
-                              style={{ color: tenant.theme.accentPrimary }}
-                            />
-                            <span>{item}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
+                <div>
+                  <span
+                    className="font-display text-2xl font-bold block"
+                    style={{ color: tenant.theme.accentPrimary }}
+                  >
+                    35%
+                  </span>
+                  <span className="text-xs font-medium" style={{ color: tenant.theme.textSecondary }}>
+                    Dedicated Greenbelt
+                  </span>
+                </div>
+                <div>
+                  <span
+                    className="font-display text-2xl font-bold block"
+                    style={{ color: tenant.theme.accentPrimary }}
+                  >
+                    100%
+                  </span>
+                  <span className="text-xs font-medium" style={{ color: tenant.theme.textSecondary }}>
+                    Funded Capital Reserves
+                  </span>
                 </div>
               </div>
             </div>
@@ -1060,13 +956,13 @@ export default function NavbarAndHero({
             {/* Right 5 Columns: Architectural Imagery Composition */}
             <div className="lg:col-span-5 space-y-4">
               <div
-                className="rounded-xl overflow-hidden border shadow-md"
+                className="rounded-2xl overflow-hidden border shadow-lg group"
                 style={{ borderColor: tenant.theme.borderSubtle }}
               >
                 <img
                   src={tenant.about.featuredImageUrl}
                   alt={`${tenant.name} architectural streetscape`}
-                  className="w-full aspect-[4/3] object-cover"
+                  className="w-full aspect-[4/3] object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 <div
                   className="p-4 flex items-center justify-between text-xs border-t"
@@ -1076,45 +972,353 @@ export default function NavbarAndHero({
                     color: tenant.theme.textSecondary,
                   }}
                 >
-                  <span>Master-Planned Residential Enclave</span>
-                  <span className="font-mono">35% Dedicated Greenbelt</span>
-                </div>
-              </div>
-
-              <div
-                className="p-5 rounded-xl border flex items-center gap-4"
-                style={{
-                  backgroundColor: tenant.theme.bgSecondary,
-                  borderColor: tenant.theme.borderSubtle,
-                }}
-              >
-                <img
-                  src={tenant.about.secondaryImageUrl}
-                  alt="Community gathering terrace"
-                  className="w-24 h-20 rounded-lg object-cover shrink-0 border"
-                  style={{ borderColor: tenant.theme.borderSubtle }}
-                />
-                <div>
-                  <p
-                    className="text-[11px] font-mono uppercase tracking-wider"
-                    style={{ color: tenant.theme.accentSecondary }}
-                  >
-                    Resident-Led Stewardship
-                  </p>
-                  <p
-                    className="text-sm font-semibold mt-0.5"
-                    style={{ color: tenant.theme.textPrimary }}
-                  >
-                    100% Funded 30-Year Capital Reserve Study
-                  </p>
-                  <p className="text-xs mt-1" style={{ color: tenant.theme.textSecondary }}>
-                    Audited annually with full financial disclosures accessible to all homeowners.
-                  </p>
+                  <span className="font-semibold" style={{ color: tenant.theme.textPrimary }}>
+                    Master-Planned Residential Enclave
+                  </span>
+                  <span className="font-mono text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full">
+                    35% Dedicated Greenbelt
+                  </span>
                 </div>
               </div>
             </div>
           </div>
+        </div>
+      </section>
 
+      {/* SECTION 4: Community Charter, Milestones & Living Standards (Dedicated Showcase Section) */}
+      <section
+        id="standards"
+        className="py-20 lg:py-28 border-b"
+        style={{
+          backgroundColor: tenant.theme.bgSecondary,
+          borderColor: tenant.theme.borderSubtle,
+        }}
+      >
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-8 space-y-12">
+          {/* Section Header with Centered/Aligned Tabs */}
+          <div
+            className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 border-b pb-8"
+            style={{ borderColor: tenant.theme.borderSubtle }}
+          >
+            <div className="max-w-2xl space-y-2">
+              <p
+                className="text-xs font-mono uppercase tracking-[0.15em]"
+                style={{ color: tenant.theme.accentSecondary }}
+              >
+                COMMUNITY CHARTER & ARCHITECTURAL HERITAGE
+              </p>
+              <h2
+                className="font-display text-3xl sm:text-4xl lg:text-[40px] font-semibold tracking-tight leading-[1.12]"
+                style={{ color: tenant.theme.textPrimary }}
+              >
+                Foundations, Milestones & Living Standards
+              </h2>
+              <p className="text-sm sm:text-base leading-relaxed" style={{ color: tenant.theme.textSecondary }}>
+                Explore our resident-led governance charter, chronological development milestones, and architectural pattern guidelines that preserve enduring property value.
+              </p>
+            </div>
+
+            {/* Segmented Full-Width Tab Switcher */}
+            <div
+              className="inline-flex rounded-xl p-1.5 border gap-1 shrink-0 self-start lg:self-end"
+              style={{
+                backgroundColor: tenant.theme.bgPrimary,
+                borderColor: tenant.theme.borderSubtle,
+              }}
+            >
+              {[
+                { id: "mission", label: "Mission & Vision" },
+                { id: "history", label: "Subdivision History & Milestones" },
+                { id: "architecture", label: "Architectural Standards" },
+              ].map((tab) => {
+                const active = activeAboutTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() =>
+                      setActiveAboutTab(tab.id as "mission" | "history" | "architecture")
+                    }
+                    className={`px-4 sm:px-5 py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
+                      active ? "shadow-xs text-white" : "hover:bg-black/5"
+                    }`}
+                    style={{
+                      backgroundColor: active ? tenant.theme.accentPrimary : "transparent",
+                      color: active ? "#FFFFFF" : tenant.theme.textPrimary,
+                    }}
+                  >
+                    {tab.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Tab Panel Content: Mission & Vision */}
+          {activeAboutTab === "mission" && (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-fade-up">
+              {/* Mission Card */}
+              <div
+                className="p-8 rounded-2xl border flex flex-col justify-between space-y-6 shadow-xs"
+                style={{
+                  backgroundColor: tenant.theme.bgPrimary,
+                  borderColor: tenant.theme.borderSubtle,
+                }}
+              >
+                <div className="space-y-4">
+                  <div
+                    className="w-12 h-12 rounded-xl flex items-center justify-center text-white shadow-xs"
+                    style={{ backgroundColor: tenant.theme.accentPrimary }}
+                  >
+                    <Compass className="w-6 h-6 text-amber-300" />
+                  </div>
+                  <div>
+                    <span
+                      className="text-[11px] font-mono uppercase tracking-wider block font-semibold"
+                      style={{ color: tenant.theme.accentSecondary }}
+                    >
+                      Our Community Mission
+                    </span>
+                    <h3
+                      className="font-display text-2xl font-bold mt-1"
+                      style={{ color: tenant.theme.textPrimary }}
+                    >
+                      Stewardship & Everyday Excellence
+                    </h3>
+                  </div>
+                  <p className="text-sm leading-relaxed" style={{ color: tenant.theme.textSecondary }}>
+                    {tenant.about.mission}
+                  </p>
+                </div>
+                <div
+                  className="pt-4 border-t flex items-center gap-2 text-xs font-semibold"
+                  style={{ borderColor: tenant.theme.borderSubtle, color: tenant.theme.accentPrimary }}
+                >
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>Enacted by Homeowner Charter</span>
+                </div>
+              </div>
+
+              {/* Vision Card */}
+              <div
+                className="p-8 rounded-2xl border flex flex-col justify-between space-y-6 shadow-xs"
+                style={{
+                  backgroundColor: tenant.theme.bgPrimary,
+                  borderColor: tenant.theme.borderSubtle,
+                }}
+              >
+                <div className="space-y-4">
+                  <div
+                    className="w-12 h-12 rounded-xl flex items-center justify-center text-white shadow-xs"
+                    style={{ backgroundColor: tenant.theme.accentPrimary }}
+                  >
+                    <Award className="w-6 h-6 text-amber-300" />
+                  </div>
+                  <div>
+                    <span
+                      className="text-[11px] font-mono uppercase tracking-wider block font-semibold"
+                      style={{ color: tenant.theme.accentSecondary }}
+                    >
+                      Our Long-Range Vision
+                    </span>
+                    <h3
+                      className="font-display text-2xl font-bold mt-1"
+                      style={{ color: tenant.theme.textPrimary }}
+                    >
+                      Enduring Generational Value
+                    </h3>
+                  </div>
+                  <p className="text-sm leading-relaxed" style={{ color: tenant.theme.textSecondary }}>
+                    {tenant.about.vision}
+                  </p>
+                </div>
+                <div
+                  className="pt-4 border-t flex items-center gap-2 text-xs font-semibold"
+                  style={{ borderColor: tenant.theme.borderSubtle, color: tenant.theme.accentPrimary }}
+                >
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>Sustainable 30-Year Horizon</span>
+                </div>
+              </div>
+
+              {/* Resident-Led Stewardship Card */}
+              <div
+                className="p-8 rounded-2xl border flex flex-col justify-between space-y-6 shadow-xs"
+                style={{
+                  backgroundColor: tenant.theme.bgPrimary,
+                  borderColor: tenant.theme.borderSubtle,
+                }}
+              >
+                <div className="space-y-4">
+                  <div className="relative rounded-xl overflow-hidden border aspect-[16/9]" style={{ borderColor: tenant.theme.borderSubtle }}>
+                    <img
+                      src={tenant.about.secondaryImageUrl}
+                      alt="Community gathering pavilion"
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute top-3 left-3 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded text-[10px] font-mono text-white font-semibold uppercase tracking-wider">
+                      Resident-Led Stewardship
+                    </div>
+                  </div>
+                  <div>
+                    <h3
+                      className="font-display text-xl font-bold mt-1"
+                      style={{ color: tenant.theme.textPrimary }}
+                    >
+                      100% Funded 30-Year Capital Reserve Study
+                    </h3>
+                    <p className="text-sm leading-relaxed mt-2" style={{ color: tenant.theme.textSecondary }}>
+                      Audited annually with full financial disclosures accessible to all verified homeowners via the resident portal.
+                    </p>
+                  </div>
+                </div>
+                <div
+                  className="pt-4 border-t flex items-center justify-between gap-2"
+                  style={{ borderColor: tenant.theme.borderSubtle }}
+                >
+                  <span className="text-xs font-mono font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">
+                    ✓ Annual CPA Audit Pass
+                  </span>
+                  <a
+                    href="#documents"
+                    className="text-xs font-semibold underline hover:opacity-80 transition-opacity"
+                    style={{ color: tenant.theme.accentPrimary }}
+                  >
+                    View Disclosures →
+                  </a>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Tab Panel Content: History & Milestones */}
+          {activeAboutTab === "history" && (
+            <div className="space-y-6 animate-fade-up">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {tenant.about.milestones.map((m, idx) => (
+                  <div
+                    key={m.year}
+                    className="p-6 rounded-2xl border flex flex-col justify-between space-y-4 shadow-xs transition-all duration-300 hover:-translate-y-1 hover:shadow-md relative overflow-hidden"
+                    style={{
+                      backgroundColor: tenant.theme.bgPrimary,
+                      borderColor: tenant.theme.borderSubtle,
+                    }}
+                  >
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span
+                          className="px-3 py-1 rounded-full text-xs font-mono font-bold text-white shadow-2xs"
+                          style={{ backgroundColor: tenant.theme.accentPrimary }}
+                        >
+                          {m.year}
+                        </span>
+                        <span className="text-[11px] font-mono" style={{ color: tenant.theme.textSecondary }}>
+                          Milestone 0{idx + 1}
+                        </span>
+                      </div>
+                      <h4
+                        className="font-display text-lg font-semibold leading-snug"
+                        style={{ color: tenant.theme.textPrimary }}
+                      >
+                        {m.title}
+                      </h4>
+                      <p
+                        className="text-xs sm:text-sm leading-relaxed"
+                        style={{ color: tenant.theme.textSecondary }}
+                      >
+                        {m.description}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Tab Panel Content: Architectural Standards */}
+          {activeAboutTab === "architecture" && (
+            <div
+              className="p-8 sm:p-10 rounded-2xl border shadow-xs animate-fade-up space-y-8"
+              style={{
+                backgroundColor: tenant.theme.bgPrimary,
+                borderColor: tenant.theme.borderSubtle,
+              }}
+            >
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <div className="lg:col-span-7 space-y-4">
+                  <span
+                    className="text-xs font-mono uppercase tracking-wider font-semibold"
+                    style={{ color: tenant.theme.accentSecondary }}
+                  >
+                    ARCHITECTURAL PATTERN BOOK & ECOLOGICAL COVENANTS
+                  </span>
+                  <h3
+                    className="font-display text-2xl sm:text-3xl font-bold"
+                    style={{ color: tenant.theme.textPrimary }}
+                  >
+                    Timeless Hill Country Architecture & Native Materials
+                  </h3>
+                  <p className="text-sm sm:text-base leading-relaxed" style={{ color: tenant.theme.textSecondary }}>
+                    {tenant.about.architecturalNote}
+                  </p>
+                  <div className="pt-2">
+                    <a
+                      href="#documents"
+                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-xs sm:text-sm font-semibold text-white shadow-xs transition-transform hover:-translate-y-0.5"
+                      style={{ backgroundColor: tenant.theme.accentPrimary }}
+                    >
+                      <Download className="w-4 h-4" />
+                      <span>Download Official Architectural Pattern Book (PDF)</span>
+                    </a>
+                  </div>
+                </div>
+
+                <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {[
+                    { title: "Underground Infrastructure", desc: "100% Underground Fiber & Utilities" },
+                    { title: "Dark-Sky Certified", desc: "Zero light pollution street illumination" },
+                    { title: "Preserved Greenbelt", desc: "Minimum 35% protected open space" },
+                    { title: "Native Landscaping", desc: "Drought-tolerant native Texas flora" },
+                  ].map((item) => (
+                    <div
+                      key={item.title}
+                      className="p-4 rounded-xl border flex flex-col justify-between space-y-1.5"
+                      style={{
+                        backgroundColor: tenant.theme.bgSecondary,
+                        borderColor: tenant.theme.borderSubtle,
+                      }}
+                    >
+                      <div className="flex items-center gap-2">
+                        <CheckCircle2
+                          className="w-4 h-4 shrink-0"
+                          style={{ color: tenant.theme.accentPrimary }}
+                        />
+                        <span className="font-semibold text-xs" style={{ color: tenant.theme.textPrimary }}>
+                          {item.title}
+                        </span>
+                      </div>
+                      <p className="text-[11px]" style={{ color: tenant.theme.textSecondary }}>
+                        {item.desc}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* SECTION 5: Core Values & Guiding Pillars */}
+      <section
+        id="values"
+        className="py-20 lg:py-28 border-b"
+        style={{
+          backgroundColor: tenant.theme.bgPrimary,
+          borderColor: tenant.theme.borderSubtle,
+        }}
+      >
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-8 space-y-8">
           {/* Core Values 4-Card Architectural Grid */}
           <div className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b pb-4"
