@@ -953,10 +953,11 @@ export default function NavbarAndHero({
               </div>
             </div>
 
-            {/* Right 5 Columns: Architectural Imagery Composition */}
-            <div className="lg:col-span-5 space-y-4">
+            {/* Right 5 Columns: Layered Editorial Architectural Collage */}
+            <div className="lg:col-span-5 relative pt-4 pb-12 sm:pb-16 lg:pb-8">
+              {/* Primary Architectural Showcase Frame */}
               <div
-                className="rounded-2xl overflow-hidden border shadow-lg group"
+                className="relative rounded-3xl overflow-hidden border shadow-2xl group transition-all duration-500 hover:shadow-3xl"
                 style={{ borderColor: tenant.theme.borderSubtle }}
               >
                 <img
@@ -964,20 +965,82 @@ export default function NavbarAndHero({
                   alt={`${tenant.name} architectural streetscape`}
                   className="w-full aspect-[4/3] object-cover transition-transform duration-700 group-hover:scale-105"
                 />
+
+                {/* Subtle Cinematic Vignette */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/15 to-black/25 pointer-events-none" />
+
+                {/* Top Floating Glassmorphism Pill */}
+                <div className="absolute top-4 left-4 bg-black/55 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/20 text-white flex items-center gap-2 shadow-lg">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                  <span className="text-xs font-semibold tracking-wide">
+                    Master-Planned Enclave
+                  </span>
+                </div>
+
+                {/* Bottom Overlay Label */}
+                <div className="absolute bottom-4 left-4 right-20 sm:right-28 text-white">
+                  <p className="font-display text-base sm:text-lg font-semibold drop-shadow-sm leading-snug">
+                    Custom Residences & Hill Country Covenants
+                  </p>
+                  <p className="text-[11px] text-stone-300 font-mono mt-0.5">
+                    Architectural Pattern Book Compliant
+                  </p>
+                </div>
+              </div>
+
+              {/* Overlapping Accent Card (Layered at Bottom-Right) */}
+              <div
+                className="absolute -bottom-4 right-2 sm:right-4 w-44 sm:w-52 aspect-[4/3] rounded-2xl overflow-hidden border-4 border-white shadow-2xl z-20 group transition-all duration-300 hover:-translate-y-1 hover:scale-102"
+                style={{
+                  backgroundColor: tenant.theme.bgSecondary,
+                }}
+              >
+                <img
+                  src={tenant.about.secondaryImageUrl}
+                  alt="Evening terrace and community gathering pavilion"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-108"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute bottom-2.5 left-3 right-3 text-white">
+                  <span className="text-[9px] font-mono uppercase tracking-wider font-bold text-amber-300 block">
+                    Civic Pavilion
+                  </span>
+                  <p className="text-xs font-semibold truncate drop-shadow-xs">
+                    Terrace & Trails
+                  </p>
+                </div>
+              </div>
+
+              {/* Floating Stewardship Seal (Layered at Bottom-Left) */}
+              <div
+                className="absolute -bottom-6 left-2 sm:-left-4 px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-xl border shadow-xl backdrop-blur-md flex items-center gap-3 z-30 transition-all duration-300 hover:-translate-y-1"
+                style={{
+                  backgroundColor: `${tenant.theme.bgPrimary}F2`,
+                  borderColor: tenant.theme.borderSubtle,
+                }}
+              >
                 <div
-                  className="p-4 flex items-center justify-between text-xs border-t"
+                  className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0 shadow-xs"
                   style={{
-                    backgroundColor: tenant.theme.bgSecondary,
-                    borderColor: tenant.theme.borderSubtle,
-                    color: tenant.theme.textSecondary,
+                    backgroundColor: tenant.theme.accentPrimary,
+                    color: "#FFFFFF",
                   }}
                 >
-                  <span className="font-semibold" style={{ color: tenant.theme.textPrimary }}>
-                    Master-Planned Residential Enclave
+                  <ShieldCheck className="w-5 h-5 text-amber-300" />
+                </div>
+                <div>
+                  <span
+                    className="text-[10px] font-mono uppercase tracking-wider font-bold block"
+                    style={{ color: tenant.theme.accentSecondary }}
+                  >
+                    Dedicated Preserve
                   </span>
-                  <span className="font-mono text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full">
-                    35% Dedicated Greenbelt
-                  </span>
+                  <p
+                    className="text-xs font-bold leading-tight"
+                    style={{ color: tenant.theme.textPrimary }}
+                  >
+                    35% Protected Greenbelt
+                  </p>
                 </div>
               </div>
             </div>
