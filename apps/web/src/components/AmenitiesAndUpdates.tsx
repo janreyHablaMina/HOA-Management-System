@@ -43,7 +43,6 @@ export default function AmenitiesAndUpdates({
 
   // Section 6: Announcements state
   const [announcementCategory, setAnnouncementCategory] = useState<string>("All");
-  const [announcementSearch, setAnnouncementSearch] = useState<string>("");
   const [selectedAnnouncement, setSelectedAnnouncement] =
     useState<AnnouncementItem | null>(null);
 
@@ -78,14 +77,7 @@ export default function AmenitiesAndUpdates({
     "Architectural Review",
   ];
   const filteredAnnouncements = tenant.announcements.filter((ann) => {
-    const matchesCategory =
-      announcementCategory === "All" || ann.category === announcementCategory;
-    const matchesSearch =
-      announcementSearch.trim() === "" ||
-      ann.title.toLowerCase().includes(announcementSearch.toLowerCase()) ||
-      ann.summary.toLowerCase().includes(announcementSearch.toLowerCase()) ||
-      ann.referenceCode.toLowerCase().includes(announcementSearch.toLowerCase());
-    return matchesCategory && matchesSearch;
+    return announcementCategory === "All" || ann.category === announcementCategory;
   });
 
   const featuredAnnouncement =
@@ -347,58 +339,34 @@ export default function AmenitiesAndUpdates({
           borderColor: tenant.theme.borderSubtle,
         }}
       >
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-8 space-y-12">
-          {/* Section Header with Integrated Search and Category Filter */}
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 border-b pb-8"
-            style={{ borderColor: tenant.theme.borderSubtle }}
-          >
-            <div className="space-y-3 max-w-2xl">
-              <p
-                className="text-xs font-mono uppercase tracking-[0.15em]"
-                style={{ color: tenant.theme.accentSecondary }}
-              >
-                OFFICIAL COMMUNITY DISPATCH & BULLETINS
-              </p>
-              <h2
-                className="font-display text-3xl sm:text-4xl lg:text-[44px] font-semibold tracking-tight leading-[1.12]"
-                style={{ color: tenant.theme.textPrimary }}
-              >
-                Latest News, Maintenance Advisories & Board Notices
-              </h2>
-              <p
-                className="text-sm sm:text-base leading-relaxed"
-                style={{ color: tenant.theme.textSecondary }}
-              >
-                Public operational updates, infrastructure schedules, and governance notices approved for community-wide display.
-              </p>
-            </div>
-
-            {/* Search & Filter Controls */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-              <div className="relative">
-                <Search
-                  className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 opacity-50"
-                  style={{ color: tenant.theme.textSecondary }}
-                />
-                <input
-                  type="text"
-                  value={announcementSearch}
-                  onChange={(e) => setAnnouncementSearch(e.target.value)}
-                  placeholder="Search notices or codes..."
-                  aria-label="Search announcements"
-                  className="pl-9 pr-4 py-2.5 rounded-xl border text-xs w-full sm:w-64 focus:outline-none transition-shadow"
-                  style={{
-                    backgroundColor: tenant.theme.bgSecondary,
-                    borderColor: tenant.theme.borderSubtle,
-                    color: tenant.theme.textPrimary,
-                  }}
-                />
-              </div>
-            </div>
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-8 space-y-8">
+          {/* Section Header */}
+          <div className="space-y-3 max-w-3xl">
+            <p
+              className="text-xs font-mono uppercase tracking-[0.15em]"
+              style={{ color: tenant.theme.accentSecondary }}
+            >
+              OFFICIAL COMMUNITY DISPATCH & BULLETINS
+            </p>
+            <h2
+              className="font-display text-3xl sm:text-4xl lg:text-[44px] font-semibold tracking-tight leading-[1.12]"
+              style={{ color: tenant.theme.textPrimary }}
+            >
+              Latest News, Maintenance Advisories & Board Notices
+            </h2>
+            <p
+              className="text-sm sm:text-base leading-relaxed"
+              style={{ color: tenant.theme.textSecondary }}
+            >
+              Public operational updates, infrastructure schedules, and governance notices approved for community-wide display.
+            </p>
           </div>
 
           {/* Category Filter Pills */}
-          <div className="flex flex-wrap gap-2">
+          <div
+            className="flex flex-wrap items-center gap-2 pb-6 border-b"
+            style={{ borderColor: tenant.theme.borderSubtle }}
+          >
             {announcementCategories.map((cat) => {
               const active = announcementCategory === cat;
               return (
@@ -406,7 +374,7 @@ export default function AmenitiesAndUpdates({
                   key={cat}
                   type="button"
                   onClick={() => setAnnouncementCategory(cat)}
-                  className={`px-4 py-2 rounded-lg text-xs font-semibold border transition-all cursor-pointer ${
+                  className={`px-4 py-2 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
                     active ? "shadow-xs text-white" : "hover:bg-black/5"
                   }`}
                   style={{
@@ -436,17 +404,14 @@ export default function AmenitiesAndUpdates({
               }}
             >
               <Bell className="w-8 h-8 mx-auto mb-3 opacity-40" />
-              <p className="text-base font-semibold">No bulletins match your search criteria</p>
+              <p className="text-base font-semibold">No bulletins found in this category</p>
               <button
                 type="button"
-                onClick={() => {
-                  setAnnouncementSearch("");
-                  setAnnouncementCategory("All");
-                }}
+                onClick={() => setAnnouncementCategory("All")}
                 className="mt-3 text-xs font-semibold underline cursor-pointer"
                 style={{ color: tenant.theme.accentPrimary }}
               >
-                Reset filters
+                View all bulletins
               </button>
             </div>
           ) : (
