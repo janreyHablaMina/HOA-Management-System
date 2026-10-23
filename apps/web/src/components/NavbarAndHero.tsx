@@ -106,6 +106,7 @@ export default function NavbarAndHero({
     "mission"
   );
   const [scrolled, setScrolled] = useState(false);
+  const [hoveredPillar, setHoveredPillar] = useState<string | null>(null);
 
   useEffect(() => {
     setActiveSceneIndex(0);
@@ -1407,58 +1408,89 @@ export default function NavbarAndHero({
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {tenant.about.coreValues.map((val) => (
-                <div
-                  key={val.principleCode}
-                  className="p-6 rounded-xl border transition-all duration-300 hover:-translate-y-1 hover:shadow-md flex flex-col justify-between"
-                  style={{
-                    backgroundColor: tenant.theme.bgSecondary,
-                    borderColor: tenant.theme.borderSubtle,
-                  }}
-                >
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span
-                        className="text-xs font-mono font-semibold px-2.5 py-1 rounded border"
-                        style={{
-                          backgroundColor: tenant.theme.bgPrimary,
-                          borderColor: tenant.theme.borderSubtle,
-                          color: tenant.theme.accentSecondary,
-                        }}
-                      >
-                        {val.principleCode}
-                      </span>
-                      <Layers
-                        className="w-4 h-4 opacity-60"
-                        style={{ color: tenant.theme.accentPrimary }}
-                      />
-                    </div>
-                    <h4
-                      className="font-display text-xl font-semibold"
-                      style={{ color: tenant.theme.textPrimary }}
-                    >
-                      {val.title}
-                    </h4>
-                    <p
-                      className="text-sm leading-relaxed"
-                      style={{ color: tenant.theme.textSecondary }}
-                    >
-                      {val.description}
-                    </p>
-                  </div>
-
+              {tenant.about.coreValues.map((val) => {
+                const isHovered = hoveredPillar === val.principleCode;
+                return (
                   <div
-                    className="mt-6 pt-3 border-t flex items-center justify-between text-[11px] font-mono"
+                    key={val.principleCode}
+                    onMouseEnter={() => setHoveredPillar(val.principleCode)}
+                    onMouseLeave={() => setHoveredPillar(null)}
+                    className={`p-6 sm:p-7 rounded-2xl border transition-all duration-300 flex flex-col justify-between cursor-pointer group ${
+                      isHovered
+                        ? "-translate-y-2 shadow-2xl scale-[1.02]"
+                        : "hover:-translate-y-1 hover:shadow-md"
+                    }`}
                     style={{
-                      borderColor: tenant.theme.borderSubtle,
-                      color: tenant.theme.accentPrimary,
+                      backgroundColor: isHovered
+                        ? tenant.theme.accentPrimary
+                        : tenant.theme.bgSecondary,
+                      borderColor: isHovered
+                        ? tenant.theme.accentPrimary
+                        : tenant.theme.borderSubtle,
                     }}
                   >
-                    <span>Protected by Covenant</span>
-                    <span>✓ Active</span>
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <span
+                          className="text-xs font-mono font-semibold px-2.5 py-1 rounded-md border transition-all duration-300"
+                          style={{
+                            backgroundColor: isHovered
+                              ? "rgba(255, 255, 255, 0.18)"
+                              : tenant.theme.bgPrimary,
+                            borderColor: isHovered
+                              ? "rgba(255, 255, 255, 0.3)"
+                              : tenant.theme.borderSubtle,
+                            color: isHovered ? "#FFFFFF" : tenant.theme.accentSecondary,
+                          }}
+                        >
+                          {val.principleCode}
+                        </span>
+                        <Layers
+                          className={`w-5 h-5 transition-all duration-300 ${
+                            isHovered
+                              ? "scale-110 opacity-100"
+                              : "opacity-60"
+                          }`}
+                          style={{
+                            color: isHovered ? "#FDE68A" : tenant.theme.accentPrimary,
+                          }}
+                        />
+                      </div>
+                      <h4
+                        className="font-display text-xl font-bold transition-colors duration-300"
+                        style={{
+                          color: isHovered ? "#FFFFFF" : tenant.theme.textPrimary,
+                        }}
+                      >
+                        {val.title}
+                      </h4>
+                      <p
+                        className="text-sm leading-relaxed transition-colors duration-300"
+                        style={{
+                          color: isHovered
+                            ? "rgba(255, 255, 255, 0.9)"
+                            : tenant.theme.textSecondary,
+                        }}
+                      >
+                        {val.description}
+                      </p>
+                    </div>
+
+                    <div
+                      className="mt-6 pt-3.5 border-t flex items-center justify-between text-[11px] font-mono transition-colors duration-300"
+                      style={{
+                        borderColor: isHovered
+                          ? "rgba(255, 255, 255, 0.22)"
+                          : tenant.theme.borderSubtle,
+                        color: isHovered ? "#FDE68A" : tenant.theme.accentPrimary,
+                      }}
+                    >
+                      <span>Protected by Covenant</span>
+                      <span className="font-semibold">✓ Active</span>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>

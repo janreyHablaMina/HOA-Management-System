@@ -228,11 +228,12 @@ export default function AmenitiesAndUpdates({
             {filteredAmenities.map((amenity) => (
               <article
                 key={amenity.id}
-                className="rounded-xl overflow-hidden border flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:shadow-lg group"
+                className="rounded-2xl overflow-hidden border flex flex-col justify-between transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl group cursor-pointer"
                 style={{
                   backgroundColor: tenant.theme.bgPrimary,
                   borderColor: tenant.theme.borderSubtle,
                 }}
+                onClick={() => setSelectedAmenity(amenity)}
               >
                 <div>
                   {/* Image & Status Badge */}
@@ -240,11 +241,11 @@ export default function AmenitiesAndUpdates({
                     <img
                       src={amenity.imageUrl}
                       alt={amenity.name}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-black/20" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-black/20" />
                     <div className="absolute top-3 left-3 right-3 flex items-center justify-between gap-2">
-                      <span className="px-2.5 py-1 rounded text-[11px] font-mono uppercase tracking-wider bg-black/65 text-white backdrop-blur-md border border-white/15">
+                      <span className="px-2.5 py-1 rounded-md text-[11px] font-mono uppercase tracking-wider bg-black/60 text-white backdrop-blur-md border border-white/20">
                         {amenity.category}
                       </span>
                       <span
@@ -266,76 +267,60 @@ export default function AmenitiesAndUpdates({
                     </div>
                   </div>
 
-                  {/* Card Body */}
-                  <div className="p-6 space-y-4">
+                  {/* Simplified Card Body */}
+                  <div className="p-6 space-y-3">
+                    <div
+                      className="flex items-center gap-1.5 text-xs font-mono"
+                      style={{ color: tenant.theme.textSecondary }}
+                    >
+                      <Clock
+                        className="w-3.5 h-3.5 shrink-0"
+                        style={{ color: tenant.theme.accentSecondary }}
+                      />
+                      <span className="truncate">{amenity.hours}</span>
+                    </div>
+
                     <h3
-                      className="font-display text-2xl font-semibold leading-snug"
+                      className="font-display text-xl sm:text-2xl font-bold leading-snug group-hover:underline decoration-1 underline-offset-4"
                       style={{ color: tenant.theme.textPrimary }}
                     >
                       {amenity.name}
                     </h3>
 
-                    <div
-                      className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-mono py-2 border-y"
-                      style={{
-                        borderColor: tenant.theme.borderSubtle,
-                        color: tenant.theme.textSecondary,
-                      }}
-                    >
-                      <span className="inline-flex items-center gap-1.5">
-                        <Clock className="w-3.5 h-3.5" style={{ color: tenant.theme.accentSecondary }} />
-                        {amenity.hours}
-                      </span>
-                    </div>
-
                     <p
-                      className="text-sm leading-relaxed"
+                      className="text-xs sm:text-sm leading-relaxed line-clamp-2"
                       style={{ color: tenant.theme.textSecondary }}
                     >
                       {amenity.description}
                     </p>
-
-                    <ul className="space-y-1.5 pt-1">
-                      {amenity.highlights.map((h) => (
-                        <li
-                          key={h}
-                          className="text-xs flex items-start gap-2"
-                          style={{ color: tenant.theme.textPrimary }}
-                        >
-                          <CheckCircle2
-                            className="w-3.5 h-3.5 mt-0.5 shrink-0"
-                            style={{ color: tenant.theme.accentPrimary }}
-                          />
-                          <span>{h}</span>
-                        </li>
-                      ))}
-                    </ul>
                   </div>
                 </div>
 
                 {/* Card Footer Action */}
                 <div
-                  className="px-6 py-4 border-t flex items-center justify-between gap-3"
+                  className="px-6 py-4 border-t flex items-center justify-between gap-3 mt-2"
                   style={{
-                    backgroundColor: `${tenant.theme.bgSecondary}80`,
+                    backgroundColor: `${tenant.theme.bgSecondary}60`,
                     borderColor: tenant.theme.borderSubtle,
                   }}
+                  onClick={(e) => e.stopPropagation()}
                 >
                   <button
                     type="button"
                     onClick={() => setSelectedAmenity(amenity)}
-                    className="text-xs font-semibold underline decoration-dotted hover:opacity-80 cursor-pointer"
+                    className="inline-flex items-center gap-1 text-xs font-semibold hover:opacity-80 cursor-pointer"
                     style={{ color: tenant.theme.accentPrimary }}
                   >
-                    Rules & Facility Details
+                    <span>View Details</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
                   </button>
                   <button
                     type="button"
                     onClick={() => onOpenPortalModal("login")}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-semibold text-white transition-opacity hover:opacity-90 cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold text-white transition-opacity hover:opacity-90 cursor-pointer shadow-2xs"
                     style={{ backgroundColor: tenant.theme.accentPrimary }}
                   >
-                    <span>Reserve / Access</span>
+                    <span>Reserve</span>
                     <ArrowUpRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
@@ -856,6 +841,35 @@ export default function AmenitiesAndUpdates({
               <p className="text-sm leading-relaxed" style={{ color: tenant.theme.textSecondary }}>
                 {selectedAmenity.description}
               </p>
+
+              {/* Key Facility Features & Highlights */}
+              {selectedAmenity.highlights && selectedAmenity.highlights.length > 0 && (
+                <div className="space-y-2.5">
+                  <h4
+                    className="text-xs font-mono uppercase tracking-wider font-semibold"
+                    style={{ color: tenant.theme.accentSecondary }}
+                  >
+                    Key Facility Features & Highlights
+                  </h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {selectedAmenity.highlights.map((h) => (
+                      <div
+                        key={h}
+                        className="text-xs flex items-center gap-2 p-2.5 rounded-lg border bg-white/60"
+                        style={{
+                          borderColor: tenant.theme.borderSubtle,
+                          color: tenant.theme.textPrimary,
+                        }}
+                      >
+                        <CheckCircle2
+                          className="w-4 h-4 text-emerald-600 shrink-0"
+                        />
+                        <span>{h}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               <div className="space-y-2">
                 <h4 className="text-xs font-mono uppercase tracking-wider font-semibold" style={{ color: tenant.theme.accentPrimary }}>
