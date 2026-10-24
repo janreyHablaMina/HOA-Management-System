@@ -21,6 +21,9 @@ import {
   CheckCircle2,
   Sliders,
   ArrowUpRight,
+  Smartphone,
+  QrCode,
+  Download,
 } from "lucide-react";
 import { HoaTenantConfig } from "@/types/hoa";
 
@@ -95,6 +98,9 @@ export default function NavbarAndHero({
   onOpenCmsDrawer,
 }: NavbarAndHeroProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [downloadAppModalOpen, setDownloadAppModalOpen] = useState(false);
+  const [communityDropdownOpen, setCommunityDropdownOpen] = useState(false);
+  const [governanceDropdownOpen, setGovernanceDropdownOpen] = useState(false);
   const [activeSceneIndex, setActiveSceneIndex] = useState(0);
   const [activeAboutTab, setActiveAboutTab] = useState<"mission" | "history" | "architecture">(
     "mission"
@@ -212,22 +218,207 @@ export default function NavbarAndHero({
           {/* Desktop Navigation Menu */}
           <nav
             aria-label="Main Subdivision Navigation"
-            className="hidden xl:flex items-center gap-1"
+            className="hidden lg:flex items-center gap-1"
           >
-            {navLinks.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                className="px-2.5 py-2 rounded-md text-[13px] font-medium transition-colors hover:bg-black/5"
+            <a
+              href="#about"
+              className="px-3 py-2 rounded-md text-[13px] font-medium transition-colors hover:bg-black/5"
+              style={{ color: tenant.theme.textPrimary }}
+            >
+              About
+            </a>
+
+            <a
+              href="#amenities"
+              className="px-3 py-2 rounded-md text-[13px] font-medium transition-colors hover:bg-black/5"
+              style={{ color: tenant.theme.textPrimary }}
+            >
+              Amenities
+            </a>
+
+            {/* Community Dropdown */}
+            <div
+              className="relative"
+              onMouseEnter={() => setCommunityDropdownOpen(true)}
+              onMouseLeave={() => setCommunityDropdownOpen(false)}
+            >
+              <button
+                type="button"
+                onClick={() => setCommunityDropdownOpen(!communityDropdownOpen)}
+                className="px-3 py-2 rounded-md text-[13px] font-medium transition-colors hover:bg-black/5 flex items-center gap-1 cursor-pointer"
                 style={{ color: tenant.theme.textPrimary }}
               >
-                {item.label}
-              </a>
-            ))}
+                <span>Community</span>
+                <ChevronDown className={`w-3.5 h-3.5 transition-transform ${communityDropdownOpen ? "rotate-180" : ""}`} />
+              </button>
+
+              {communityDropdownOpen && (
+                <div
+                  className="absolute left-0 top-full pt-1.5 w-60 z-50 animate-fade-up"
+                  style={{ minWidth: "15rem" }}
+                >
+                  <div
+                    className="rounded-xl border shadow-xl p-2 space-y-1"
+                    style={{
+                      backgroundColor: tenant.theme.bgPrimary,
+                      borderColor: tenant.theme.borderSubtle,
+                    }}
+                  >
+                    <a
+                      href="#announcements"
+                      onClick={() => setCommunityDropdownOpen(false)}
+                      className="flex flex-col px-3 py-2 rounded-lg hover:bg-black/5 transition-colors"
+                    >
+                      <span className="text-xs font-semibold" style={{ color: tenant.theme.textPrimary }}>
+                        Announcements & Bulletins
+                      </span>
+                      <span className="text-[11px]" style={{ color: tenant.theme.textSecondary }}>
+                        Maintenance updates & notices
+                      </span>
+                    </a>
+                    <a
+                      href="#events"
+                      onClick={() => setCommunityDropdownOpen(false)}
+                      className="flex flex-col px-3 py-2 rounded-lg hover:bg-black/5 transition-colors"
+                    >
+                      <span className="text-xs font-semibold" style={{ color: tenant.theme.textPrimary }}>
+                        Community Events
+                      </span>
+                      <span className="text-[11px]" style={{ color: tenant.theme.textSecondary }}>
+                        Gatherings, town halls & socials
+                      </span>
+                    </a>
+                    <a
+                      href="#gallery"
+                      onClick={() => setCommunityDropdownOpen(false)}
+                      className="flex flex-col px-3 py-2 rounded-lg hover:bg-black/5 transition-colors"
+                    >
+                      <span className="text-xs font-semibold" style={{ color: tenant.theme.textPrimary }}>
+                        Photo Gallery
+                      </span>
+                      <span className="text-[11px]" style={{ color: tenant.theme.textSecondary }}>
+                        Architecture & landscape scenery
+                      </span>
+                    </a>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Governance Dropdown */}
+            <div
+              className="relative"
+              onMouseEnter={() => setGovernanceDropdownOpen(true)}
+              onMouseLeave={() => setGovernanceDropdownOpen(false)}
+            >
+              <button
+                type="button"
+                onClick={() => setGovernanceDropdownOpen(!governanceDropdownOpen)}
+                className="px-3 py-2 rounded-md text-[13px] font-medium transition-colors hover:bg-black/5 flex items-center gap-1 cursor-pointer"
+                style={{ color: tenant.theme.textPrimary }}
+              >
+                <span>Governance</span>
+                <ChevronDown className={`w-3.5 h-3.5 transition-transform ${governanceDropdownOpen ? "rotate-180" : ""}`} />
+              </button>
+
+              {governanceDropdownOpen && (
+                <div
+                  className="absolute left-0 top-full pt-1.5 w-64 z-50 animate-fade-up"
+                  style={{ minWidth: "16rem" }}
+                >
+                  <div
+                    className="rounded-xl border shadow-xl p-2 space-y-1"
+                    style={{
+                      backgroundColor: tenant.theme.bgPrimary,
+                      borderColor: tenant.theme.borderSubtle,
+                    }}
+                  >
+                    <a
+                      href="#governance"
+                      onClick={() => setGovernanceDropdownOpen(false)}
+                      className="flex flex-col px-3 py-2 rounded-lg hover:bg-black/5 transition-colors"
+                    >
+                      <span className="text-xs font-semibold" style={{ color: tenant.theme.textPrimary }}>
+                        Board of Directors & Staff
+                      </span>
+                      <span className="text-[11px]" style={{ color: tenant.theme.textSecondary }}>
+                        Leadership profiles & meeting schedules
+                      </span>
+                    </a>
+                    <a
+                      href="#documents"
+                      onClick={() => setGovernanceDropdownOpen(false)}
+                      className="flex flex-col px-3 py-2 rounded-lg hover:bg-black/5 transition-colors"
+                    >
+                      <span className="text-xs font-semibold" style={{ color: tenant.theme.textPrimary }}>
+                        CC&Rs & Guidelines
+                      </span>
+                      <span className="text-[11px]" style={{ color: tenant.theme.textSecondary }}>
+                        Bylaws, forms & pattern book
+                      </span>
+                    </a>
+                    <a
+                      href="#safety"
+                      onClick={() => setGovernanceDropdownOpen(false)}
+                      className="flex flex-col px-3 py-2 rounded-lg hover:bg-black/5 transition-colors"
+                    >
+                      <span className="text-xs font-semibold" style={{ color: tenant.theme.textPrimary }}>
+                        Safety & Gate Protocols
+                      </span>
+                      <span className="text-[11px]" style={{ color: tenant.theme.textSecondary }}>
+                        Visitor passes & security contacts
+                      </span>
+                    </a>
+                    <a
+                      href="#location"
+                      onClick={() => setGovernanceDropdownOpen(false)}
+                      className="flex flex-col px-3 py-2 rounded-lg hover:bg-black/5 transition-colors"
+                    >
+                      <span className="text-xs font-semibold" style={{ color: tenant.theme.textPrimary }}>
+                        Subdivision Master Map
+                      </span>
+                      <span className="text-[11px]" style={{ color: tenant.theme.textSecondary }}>
+                        Waypoints, gatehouses & landmarks
+                      </span>
+                    </a>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <a
+              href="#faq"
+              className="px-3 py-2 rounded-md text-[13px] font-medium transition-colors hover:bg-black/5"
+              style={{ color: tenant.theme.textPrimary }}
+            >
+              FAQ
+            </a>
+
+            <a
+              href="#contact"
+              className="px-3 py-2 rounded-md text-[13px] font-medium transition-colors hover:bg-black/5"
+              style={{ color: tenant.theme.textPrimary }}
+            >
+              Contact
+            </a>
           </nav>
 
-          {/* Prominent Resident Portal CTA & Mobile Menu Trigger */}
-          <div className="flex items-center gap-3">
+          {/* Action CTAs: Download App + Resident Portal + Mobile Menu Trigger */}
+          <div className="flex items-center gap-2.5">
+            <button
+              type="button"
+              onClick={() => setDownloadAppModalOpen(true)}
+              className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-md text-xs sm:text-sm font-semibold border transition-all hover:bg-black/5 cursor-pointer shadow-2xs"
+              style={{
+                borderColor: tenant.theme.borderSubtle,
+                color: tenant.theme.textPrimary,
+              }}
+              title="Download HOA Resident Mobile App"
+            >
+              <Smartphone className="w-4 h-4" style={{ color: tenant.theme.accentSecondary }} />
+              <span>Download App</span>
+            </button>
+
             <button
               type="button"
               onClick={() => onOpenPortalModal("login")}
@@ -241,7 +432,7 @@ export default function NavbarAndHero({
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="xl:hidden p-2.5 rounded-md border transition-colors"
+              className="lg:hidden p-2.5 rounded-md border transition-colors"
               style={{
                 borderColor: tenant.theme.borderSubtle,
                 color: tenant.theme.textPrimary,
@@ -257,12 +448,44 @@ export default function NavbarAndHero({
         {/* Mobile & Tablet Navigation Drawer */}
         {mobileMenuOpen && (
           <div
-            className="xl:hidden border-t px-4 sm:px-8 py-6 space-y-5 shadow-xl"
+            className="lg:hidden border-t px-4 sm:px-8 py-6 space-y-5 shadow-xl animate-fade-up"
             style={{
               backgroundColor: tenant.theme.bgPrimary,
               borderColor: tenant.theme.borderSubtle,
             }}
           >
+            {/* Quick App & Portal Action Buttons in Mobile Drawer */}
+            <div className="grid grid-cols-2 gap-2 pb-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  setDownloadAppModalOpen(true);
+                }}
+                className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-md text-xs font-semibold border cursor-pointer"
+                style={{
+                  borderColor: tenant.theme.accentSecondary,
+                  color: tenant.theme.textPrimary,
+                  backgroundColor: tenant.theme.bgSecondary,
+                }}
+              >
+                <Smartphone className="w-3.5 h-3.5" style={{ color: tenant.theme.accentSecondary }} />
+                <span>Get Mobile App</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenPortalModal("login");
+                }}
+                className="flex items-center justify-center gap-2 px-3 py-2.5 rounded-md text-xs font-semibold text-white cursor-pointer"
+                style={{ backgroundColor: tenant.theme.accentPrimary }}
+              >
+                <Lock className="w-3.5 h-3.5 text-amber-300" />
+                <span>Resident Login</span>
+              </button>
+            </div>
+
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {navLinks.map((item) => (
                 <a
@@ -291,37 +514,177 @@ export default function NavbarAndHero({
                 </p>
                 <p>24/7 Main Gatehouse: {tenant.gatehousePhone}</p>
               </div>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    onOpenPortalModal("demo");
-                  }}
-                  className="px-4 py-2.5 rounded-md text-xs font-semibold border cursor-pointer"
-                  style={{
-                    borderColor: tenant.theme.accentPrimary,
-                    color: tenant.theme.accentPrimary,
-                  }}
-                >
-                  Preview Resident Dashboard
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    onOpenPortalModal("login");
-                  }}
-                  className="px-4 py-2.5 rounded-md text-xs font-semibold text-white cursor-pointer"
-                  style={{ backgroundColor: tenant.theme.accentPrimary }}
-                >
-                  Resident Login
-                </button>
-              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenPortalModal("demo");
+                }}
+                className="px-4 py-2.5 rounded-md text-xs font-semibold border cursor-pointer text-center"
+                style={{
+                  borderColor: tenant.theme.accentPrimary,
+                  color: tenant.theme.accentPrimary,
+                }}
+              >
+                Preview Resident Dashboard
+              </button>
             </div>
           </div>
         )}
       </header>
+
+      {/* MODAL: Download HOA Resident Mobile App */}
+      {downloadAppModalOpen && (
+        <div
+          className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4 animate-fade-up"
+          onClick={() => setDownloadAppModalOpen(false)}
+        >
+          <div
+            className="max-w-lg w-full rounded-2xl overflow-hidden border shadow-2xl p-6 sm:p-8 space-y-6"
+            style={{
+              backgroundColor: tenant.theme.bgPrimary,
+              borderColor: tenant.theme.borderSubtle,
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="flex items-start justify-between gap-4 border-b pb-4" style={{ borderColor: tenant.theme.borderSubtle }}>
+              <div className="flex items-center gap-3">
+                <div
+                  className="w-12 h-12 rounded-xl flex items-center justify-center text-white shadow-md shrink-0"
+                  style={{ backgroundColor: tenant.theme.accentPrimary }}
+                >
+                  <Smartphone className="w-6 h-6 text-amber-300" />
+                </div>
+                <div>
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-amber-700 font-bold block">
+                    OFFICIAL MOBILE APPLICATION
+                  </span>
+                  <h3 className="font-display text-2xl font-bold leading-tight" style={{ color: tenant.theme.textPrimary }}>
+                    {tenant.shortName} Resident App
+                  </h3>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setDownloadAppModalOpen(false)}
+                className="p-2 rounded-md border hover:bg-black/5 cursor-pointer"
+                style={{ borderColor: tenant.theme.borderSubtle }}
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <p className="text-xs sm:text-sm leading-relaxed" style={{ color: tenant.theme.textSecondary }}>
+              Experience effortless community living. Generate instant visitor gate passes, pay quarterly dues, reserve amenities, and receive emergency push alerts right from your smartphone.
+            </p>
+
+            {/* App Store & Google Play Badges */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <a
+                href="#download-ios"
+                onClick={(e) => {
+                  e.preventDefault();
+                  alert("iOS App: Ready for deployment on Apple App Store / TestFlight.");
+                }}
+                className="flex items-center gap-3 p-3 rounded-xl bg-black text-white hover:bg-stone-900 transition-colors shadow-sm"
+              >
+                <svg className="w-7 h-7 fill-current shrink-0" viewBox="0 0 24 24">
+                  <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.62-.75 1.04-1.8 0.92-2.85-.9.04-1.99.6-2.63 1.35-.57.66-.99 1.72-.86 2.74 1.01.08 2.03-.5 2.57-1.24z"/>
+                </svg>
+                <div className="text-left">
+                  <span className="block text-[10px] uppercase text-stone-300 leading-none">Download on the</span>
+                  <span className="text-sm font-semibold leading-tight font-sans">Apple App Store</span>
+                </div>
+              </a>
+
+              <a
+                href="#download-android"
+                onClick={(e) => {
+                  e.preventDefault();
+                  alert("Android App: Ready for deployment on Google Play Store.");
+                }}
+                className="flex items-center gap-3 p-3 rounded-xl bg-stone-900 text-white hover:bg-stone-800 transition-colors shadow-sm"
+              >
+                <svg className="w-6 h-6 fill-current shrink-0" viewBox="0 0 24 24">
+                  <path d="M3.609 1.814L13.792 12 3.61 22.186c-.339-.333-.526-.807-.526-1.35V3.164c0-.543.187-1.017.525-1.35zm11.602 11.602l2.392 2.392-10.975 6.336 8.583-8.728zm2.986-1.728l2.955 1.706c.866.5.866 1.314 0 1.814l-2.955 1.706-2.585-2.613 2.585-2.613zM6.626 3.658l10.975 6.336-2.392 2.392-8.583-8.728z"/>
+                </svg>
+                <div className="text-left">
+                  <span className="block text-[10px] uppercase text-stone-300 leading-none">Get it on</span>
+                  <span className="text-sm font-semibold leading-tight font-sans">Google Play</span>
+                </div>
+              </a>
+            </div>
+
+            {/* QR Code Section for Instant Phone Scan */}
+            <div
+              className="p-4 rounded-xl border flex items-center gap-4"
+              style={{
+                backgroundColor: tenant.theme.bgSecondary,
+                borderColor: tenant.theme.borderSubtle,
+              }}
+            >
+              <div className="w-18 h-18 bg-white p-2 rounded-lg border shrink-0 flex items-center justify-center shadow-xs">
+                <QrCode className="w-full h-full text-stone-900" />
+              </div>
+              <div className="space-y-1">
+                <span className="text-xs font-semibold block" style={{ color: tenant.theme.textPrimary }}>
+                  Scan with Camera to Install
+                </span>
+                <p className="text-xs" style={{ color: tenant.theme.textSecondary }}>
+                  Point your smartphone camera at this QR code for instant install on iOS Safari or Android Chrome.
+                </p>
+                <span className="inline-block text-[10px] font-mono uppercase tracking-wider text-emerald-700 font-semibold">
+                  ✓ Universal PWA Enabled
+                </span>
+              </div>
+            </div>
+
+            {/* Feature Highlights */}
+            <div className="space-y-2 pt-1">
+              <span className="text-[11px] font-mono uppercase tracking-wider font-semibold block" style={{ color: tenant.theme.accentPrimary }}>
+                Included Mobile Features:
+              </span>
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                {[
+                  "Instant QR Visitor Gate Passes",
+                  "1-Click Dues & Assessment Pay",
+                  "Push Maintenance & Weather Alerts",
+                  "Court & Clubhouse Reservations",
+                ].map((feat) => (
+                  <div key={feat} className="flex items-center gap-1.5" style={{ color: tenant.theme.textPrimary }}>
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                    <span className="truncate">{feat}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Bottom Actions */}
+            <div className="pt-2 border-t flex items-center justify-between gap-3" style={{ borderColor: tenant.theme.borderSubtle }}>
+              <button
+                type="button"
+                onClick={() => {
+                  setDownloadAppModalOpen(false);
+                  onOpenPortalModal("demo");
+                }}
+                className="text-xs font-semibold underline cursor-pointer"
+                style={{ color: tenant.theme.accentSecondary }}
+              >
+                Or test web portal demo view →
+              </button>
+              <button
+                type="button"
+                onClick={() => setDownloadAppModalOpen(false)}
+                className="px-4 py-2 rounded-md text-xs font-semibold text-white cursor-pointer"
+                style={{ backgroundColor: tenant.theme.accentPrimary }}
+              >
+                Done
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* SECTION 2: Hero / Full-Width Immersive Image Slider */}
       <section
