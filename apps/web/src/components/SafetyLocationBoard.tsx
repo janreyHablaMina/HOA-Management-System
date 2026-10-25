@@ -3,8 +3,6 @@
 import React, { useState, useEffect } from "react";
 import {
   ShieldCheck,
-  Phone,
-  AlertTriangle,
   CheckCircle2,
   MapPin,
   Navigation,
@@ -41,7 +39,6 @@ export default function SafetyLocationBoard({
   // Section 9: Interactive Gatehouse & Visitor Pass Preview state
   const [passType, setPassType] = useState<"guest" | "delivery" | "contractor">("guest");
   const [guestNameInput, setGuestNameInput] = useState("Alexander & Clara Sterling");
-  const [activePolicyIdx, setActivePolicyIdx] = useState(0);
 
   // Section 10: Interactive Map Pin state
   const [selectedPinId, setSelectedPinId] = useState<string>(
@@ -60,36 +57,29 @@ export default function SafetyLocationBoard({
   useEffect(() => {
     setSelectedPinId(tenant.location.mapPins[0]?.id || "");
     setActiveTestimonialIdx(0);
-    setActivePolicyIdx(0);
   }, [tenant.id, tenant.location.mapPins]);
-
-  const activePolicy =
-    tenant.safety.policies[activePolicyIdx] || tenant.safety.policies[0]!;
 
   const passTypeConfig = {
     guest: {
-      badge: "RESIDENT GUEST e-PASS",
+      badge: "Resident Guest Pass",
       code: "VG-GST-8492",
-      gate: "North Main Gatehouse (All Lanes)",
-      window: "Valid Today · 6:00 AM – 11:59 PM",
+      gateShort: "North Main Gate",
+      windowShort: "Today · Until 11:59 PM",
       defaultGuest: "Alexander & Clara Sterling",
-      vehicleNote: " Optical LPR & QR Mobile Scan Enabled",
     },
     delivery: {
-      badge: "EXPRESS COURIER PASS",
+      badge: "Express Courier Pass",
       code: "VG-DLV-3109",
-      gate: "North Gatehouse · Service Lane",
-      window: "Single Entry · 30-Minute Dropoff Window",
-      defaultGuest: "Priority Parcel / Floral Courier",
-      vehicleNote: " Direct Residence Dropoff Authorized",
+      gateShort: "Service Entry Lane",
+      windowShort: "Single Entry · 30 Min",
+      defaultGuest: "Priority Parcel / Courier",
     },
     contractor: {
-      badge: "COMMERCIAL VENDOR PASS",
+      badge: "Commercial Vendor Pass",
       code: "VG-ARC-5920",
-      gate: "North Gatehouse · Commercial Check-In",
-      window: "Mon–Fri · 7:30 AM – 6:00 PM Only",
-      defaultGuest: "Barton Creek Landscape & Masonry",
-      vehicleNote: " Commercial Decals & Quiet Hours Enforced",
+      gateShort: "Commercial Gate",
+      windowShort: "Mon–Fri · 7:30 AM–6 PM",
+      defaultGuest: "Barton Creek Masonry",
     },
   }[passType];
 
@@ -133,165 +123,80 @@ export default function SafetyLocationBoard({
         </div>
 
         <div className="max-w-[1440px] mx-auto px-4 sm:px-8 space-y-12 relative z-10">
-          {/* Top Header & Live Telemetry Badge */}
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 border-b border-white/15 pb-8">
-            <div className="space-y-3 max-w-3xl">
-              <div className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-[0.15em] text-amber-300">
+          {/* Top Header */}
+          <div className="border-b border-white/15 pb-8 text-center">
+            <div className="space-y-3 max-w-3xl mx-auto">
+              <div className="inline-flex items-center justify-center gap-2 text-xs font-mono uppercase tracking-[0.15em] text-amber-300">
                 <ShieldCheck className="w-4 h-4" />
                 <span>24/7 GATEHOUSE COMMAND & MOBILE ACCESS</span>
               </div>
               <h2 className="font-display text-3xl sm:text-4xl lg:text-[44px] font-semibold tracking-tight leading-[1.12] text-white">
                 Seamless Gate Entry in the Palm of Your Hand.
               </h2>
-              <p className="text-sm sm:text-base leading-relaxed text-stone-300">
+              <p className="text-sm sm:text-base leading-relaxed text-stone-300 max-w-2xl mx-auto">
                 {tenant.safety.subtitle}
               </p>
-            </div>
-
-            <div className="inline-flex items-center gap-3 px-4 py-3 rounded-2xl bg-emerald-950/60 border border-emerald-400/30 backdrop-blur-md self-start lg:self-end">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
-              <div>
-                <span className="text-[10px] font-mono uppercase tracking-wider text-emerald-300 block font-bold">
-                  LIVE GATEHOUSE TELEMETRY
-                </span>
-                <span className="text-xs font-semibold text-white">
-                  {tenant.safety.patrolStatus}
-                </span>
-              </div>
             </div>
           </div>
 
           {/* Main 12-Col Showcase: Gatehouse Telemetry & Protocols (Left 7 Cols) | Realistic Smartphone Device Mockup (Right 5 Cols) */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-            {/* Left 7 Columns: Live Gate Lanes & Interactive Protocol Switcher */}
+            {/* Left 7 Columns: Minimalist 3-Step Clearance Flow */}
             <div className="lg:col-span-7 space-y-8">
-              {/* Live Gatehouse Entry Lanes Status */}
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono uppercase tracking-wider text-amber-300 font-semibold flex items-center gap-1.5">
-                    <Radio className="w-3.5 h-3.5" />
-                    <span>Live Gatehouse Entry Lanes & Optical LPR</span>
-                  </span>
-                  <span className="text-[11px] font-mono text-stone-400">
-                    Encrypted RFID · 99.8% Uptime
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-                  {[
-                    {
-                      gateName: "North Main Gatehouse",
-                      mode: "24/7 Officer Staffed",
-                      lanes: "Visitor & Resident Lanes",
-                      wait: "< 1 min wait",
-                      status: "Open · Normal Flow",
-                    },
-                    {
-                      gateName: "South Parkway Gate",
-                      mode: "Optical LPR + QR",
-                      lanes: "Residents & Pre-Registered",
-                      wait: "Zero wait",
-                      status: "Open · Clear",
-                    },
-                    {
-                      gateName: "West Ridge Enclave",
-                      mode: "Resident LPR Only",
-                      lanes: "RFID & Plate Reader",
-                      wait: "Zero wait",
-                      status: "Open · Clear",
-                    },
-                  ].map((gate) => (
-                    <div
-                      key={gate.gateName}
-                      className="p-4 rounded-2xl bg-white/6 border border-white/15 hover:bg-white/10 transition-all space-y-2.5 flex flex-col justify-between"
-                    >
-                      <div className="space-y-1">
-                        <div className="flex items-center justify-between gap-1">
-                          <span className="inline-flex items-center gap-1.5 text-[10px] font-mono text-emerald-300 font-semibold">
-                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                            {gate.status}
-                          </span>
-                          <Car className="w-3.5 h-3.5 text-stone-400" />
-                        </div>
-                        <h4 className="font-display text-base font-bold text-white leading-snug">
-                          {gate.gateName}
-                        </h4>
-                        <p className="text-xs text-stone-300">{gate.lanes}</p>
-                      </div>
-                      <div className="pt-2 border-t border-white/10 flex items-center justify-between text-[11px] font-mono text-amber-300">
-                        <span>{gate.mode}</span>
-                        <span className="text-stone-400">{gate.wait}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+              <div className="space-y-4">
+                <span className="text-xs font-mono uppercase tracking-[0.15em] text-amber-300 font-semibold flex items-center gap-2">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                  EFFORTLESS GUEST CLEARANCE
+                </span>
+                <h3 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold text-white leading-tight">
+                  Gate clearance in 3 seamless steps.
+                </h3>
+                <p className="text-sm sm:text-base text-stone-300 leading-relaxed max-w-xl">
+                  Skip guard calls and physical gate passes. Pre-authorize visitors, couriers, and contractors in seconds directly through the resident portal.
+                </p>
               </div>
 
-              {/* Streamlined Community Security Protocol Switcher */}
-              <div className="p-6 sm:p-8 rounded-3xl bg-white/6 border border-white/15 space-y-6">
-                <div className="space-y-4">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
-                    <div>
-                      <span className="text-[11px] font-mono uppercase tracking-wider text-amber-300 block">
-                        COMMUNITY ACCESS & TRAFFIC PROTOCOLS
-                      </span>
-                      <h3 className="font-display text-xl sm:text-2xl font-bold text-white mt-0.5">
-                        {activePolicy.title}
-                      </h3>
-                    </div>
-
-                    {/* Policy Selector Pills */}
-                    <div className="inline-flex rounded-xl p-1 bg-black/40 border border-white/15 gap-1 self-start">
-                      {tenant.safety.policies.map((pol, idx) => {
-                        const active = idx === activePolicyIdx;
-                        return (
-                          <button
-                            key={pol.code}
-                            type="button"
-                            onClick={() => setActivePolicyIdx(idx)}
-                            className={`px-3 py-1.5 rounded-lg text-xs font-mono font-semibold transition-all cursor-pointer ${
-                              active
-                                ? "bg-amber-400 text-stone-950 shadow-xs"
-                                : "text-stone-300 hover:text-white"
-                            }`}
-                          >
-                            {pol.code}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  <p className="text-sm text-stone-300 leading-relaxed">
-                    {activePolicy.summary}
-                  </p>
-
-                  <ul className="space-y-2.5">
-                    {activePolicy.bullets.map((b) => (
-                      <li
-                        key={b}
-                        className="text-xs sm:text-sm text-stone-200 flex items-start gap-2.5"
-                      >
-                        <CheckCircle2 className="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" />
-                        <span>{b}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-3">
-                  <div className="text-xs font-mono text-stone-400">
-                    Enforced 24/7 by Staffed Gatehouse & Courtesy Patrol
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => onOpenPortalModal("login")}
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-300 hover:underline cursor-pointer"
+              <div className="space-y-3.5">
+                {[
+                  {
+                    step: "01",
+                    icon: Smartphone,
+                    title: "Generate in 10 Seconds",
+                    description:
+                      "Choose pass type (Guest, Courier, or Vendor), specify entry date or hours, and add optional vehicle plates.",
+                  },
+                  {
+                    step: "02",
+                    icon: Share2,
+                    title: "One-Tap Instant Share",
+                    description:
+                      "Send encrypted dynamic QR pass straight to your guest via SMS or WhatsApp. Easily saved to Apple Wallet or Google Pay.",
+                  },
+                  {
+                    step: "03",
+                    icon: Car,
+                    title: "Fast-Lane Optical Entry",
+                    description:
+                      "Visitors scan the digital pass at the kiosk or Optical ANPR cameras verify license plates automatically with zero queue.",
+                  },
+                ].map((item) => (
+                  <div
+                    key={item.step}
+                    className="p-4 sm:p-5 rounded-2xl bg-white/6 border border-white/10 hover:border-amber-400/30 hover:bg-white/10 transition-all flex items-start gap-4"
                   >
-                    <Lock className="w-3.5 h-3.5" />
-                    <span>Open Resident Access Portal →</span>
-                  </button>
-                </div>
+                    <div className="w-10 h-10 rounded-xl bg-amber-400/15 border border-amber-400/30 text-amber-300 flex items-center justify-center shrink-0 font-mono font-bold text-sm">
+                      {item.step}
+                    </div>
+                    <div className="space-y-1 min-w-0">
+                      <h4 className="font-display text-base font-bold text-white">
+                        {item.title}
+                      </h4>
+                      <p className="text-xs sm:text-sm text-stone-300 leading-relaxed">
+                        {item.description}
+                      </p>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
 
@@ -383,12 +288,13 @@ export default function SafetyLocationBoard({
 
                       {/* Digital Boarding Pass Ticket Inside Phone */}
                       <div className="p-4 rounded-2xl bg-white text-stone-900 shadow-xl space-y-3 relative overflow-hidden">
-                        <div className="flex items-start justify-between gap-2 border-b border-stone-200 pb-2.5">
-                          <div>
-                            <span className="text-[9px] font-mono font-bold tracking-wider uppercase text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded">
+                        <div className="flex items-start justify-between gap-3 border-b border-stone-100 pb-2.5">
+                          <div className="space-y-1">
+                            <span className="inline-flex items-center gap-1.5 text-[9px] font-mono font-bold tracking-wider uppercase text-emerald-800 bg-emerald-50 border border-emerald-200/60 px-2 py-0.5 rounded-md">
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                               {passTypeConfig.badge}
                             </span>
-                            <h5 className="font-display text-base font-bold mt-1 text-stone-950 leading-tight">
+                            <h5 className="font-display text-base font-bold text-stone-950 leading-tight">
                               {guestNameInput || passTypeConfig.defaultGuest}
                             </h5>
                             <p className="text-[10px] font-mono text-stone-500">
@@ -396,25 +302,41 @@ export default function SafetyLocationBoard({
                             </p>
                           </div>
 
-                          <div className="w-16 h-16 p-1.5 rounded-xl border border-stone-200 bg-stone-50 shrink-0 flex items-center justify-center shadow-xs">
+                          <div className="w-16 h-16 p-1.5 rounded-xl border border-stone-200/80 bg-stone-50 shrink-0 flex items-center justify-center shadow-xs">
                             <QrCode className="w-full h-full text-stone-900" />
                           </div>
                         </div>
 
-                        <div className="space-y-1.5 text-[11px] font-mono">
-                          <div className="flex justify-between text-stone-600">
-                            <span>Gate:</span>
-                            <span className="font-bold text-stone-900">{passTypeConfig.gate.split("(")[0]}</span>
+                        {/* Clean 2-Column Info Cards */}
+                        <div className="grid grid-cols-2 gap-2">
+                          <div className="p-2.5 rounded-xl bg-stone-50 border border-stone-200/70 space-y-0.5">
+                            <span className="text-[9px] font-mono uppercase tracking-wider text-stone-500 block font-semibold">
+                              Assigned Gate
+                            </span>
+                            <span className="text-xs font-bold text-stone-900 block truncate">
+                              {passTypeConfig.gateShort}
+                            </span>
                           </div>
-                          <div className="flex justify-between text-stone-600">
-                            <span>Window:</span>
-                            <span className="font-bold text-stone-900">{passTypeConfig.window}</span>
+
+                          <div className="p-2.5 rounded-xl bg-stone-50 border border-stone-200/70 space-y-0.5">
+                            <span className="text-[9px] font-mono uppercase tracking-wider text-stone-500 block font-semibold">
+                              Access Window
+                            </span>
+                            <span className="text-xs font-bold text-stone-900 block truncate">
+                              {passTypeConfig.windowShort}
+                            </span>
                           </div>
                         </div>
 
-                        <div className="pt-2 border-t border-stone-200 flex items-center justify-between text-[10px] font-mono text-emerald-800">
-                          <span>✓ Fast-Lane Optical LPR</span>
-                          <span className="font-bold">ACTIVE</span>
+                        {/* Ticket Footer / Telemetry Verification */}
+                        <div className="pt-2 border-t border-dashed border-stone-200 flex items-center justify-between text-[10px] font-mono">
+                          <span className="text-emerald-700 font-semibold flex items-center gap-1">
+                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                            Optical ANPR Active
+                          </span>
+                          <span className="text-[9px] font-bold text-stone-500 uppercase tracking-wider">
+                            Lane 1 & 2
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -440,55 +362,6 @@ export default function SafetyLocationBoard({
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-
-          {/* Compact 4-Column Emergency & Security Direct Dispatch Bar */}
-          <div className="pt-4 space-y-3">
-            <span className="text-xs font-mono uppercase tracking-[0.15em] text-stone-400 block">
-              24/7 EMERGENCY & SECURITY DIRECT DISPATCH LINES
-            </span>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {tenant.safety.contacts.map((contact) => (
-                <a
-                  key={contact.role}
-                  href={`tel:${contact.phone.replace(/[^0-9]/g, "")}`}
-                  className={`p-4 rounded-2xl border flex items-center justify-between gap-3 transition-all hover:-translate-y-0.5 ${
-                    contact.isEmergency
-                      ? "bg-red-950/55 border-red-400/40 hover:bg-red-950/75"
-                      : "bg-white/6 border-white/15 hover:bg-white/12"
-                  }`}
-                >
-                  <div className="space-y-0.5 min-w-0">
-                    <span
-                      className={`text-[10px] font-mono uppercase tracking-wider block ${
-                        contact.isEmergency ? "text-red-300 font-bold" : "text-amber-300"
-                      }`}
-                    >
-                      {contact.availability}
-                    </span>
-                    <h4 className="font-semibold text-xs sm:text-sm text-white truncate">
-                      {contact.role}
-                    </h4>
-                    <span className="font-mono text-base font-bold text-white block pt-0.5">
-                      {contact.phone}
-                    </span>
-                  </div>
-                  <div
-                    className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
-                      contact.isEmergency
-                        ? "bg-red-500/25 text-red-200"
-                        : "bg-white/10 text-amber-300"
-                    }`}
-                  >
-                    {contact.isEmergency ? (
-                      <AlertTriangle className="w-5 h-5" />
-                    ) : (
-                      <Phone className="w-4 h-4" />
-                    )}
-                  </div>
-                </a>
-              ))}
             </div>
           </div>
         </div>
